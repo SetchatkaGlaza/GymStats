@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="GymStats.AnthropometryPage"
+             BackgroundColor="White">
+
+    <Grid RowDefinitions="Auto, *, Auto">
+        <VerticalStackLayout Grid.Row="0" Padding="30,40,30,20" Spacing="5">
+            <Label Text="Замеры тела" FontSize="28" FontAttributes="Bold" TextColor="#2E8B57" />
+            <Label Text="Отслеживай изменения своих объемов" FontSize="14" TextColor="Gray" />
+        </VerticalStackLayout>
+
+        <Grid Grid.Row="1">
+            <VerticalStackLayout IsVisible="{Binding IsListEmpty}" VerticalOptions="Center" HorizontalOptions="Center" Spacing="10">
+                <Label Text="" FontSize="60" HorizontalOptions="Center" />
+                <Label Text="Пока нет замеров" FontSize="16" TextColor="Gray" HorizontalOptions="Center" />
+            </VerticalStackLayout>
+
+            <CollectionView ItemsSource="{Binding Measurements}" SelectionMode="None" Margin="20,0">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame BackgroundColor="#F8FFF8" CornerRadius="15" Padding="20" Margin="0,0,0,15" HasShadow="False" BorderColor="#E0E0E0">
+                            <Grid ColumnDefinitions="*, Auto" RowDefinitions="Auto, Auto">
+                                <Label Grid.Row="0" Grid.Column="0" Text="{Binding Date, StringFormat='{0:dd MMMM yyyy}'}" FontSize="18" FontAttributes="Bold" TextColor="#2E8B57" />
+                                <Label Grid.Row="1" Grid.Column="0" Text="{Binding Weight, StringFormat='Вес: {0:F1} кг'}" FontSize="14" TextColor="DimGray" />
+
+                                <Button Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" 
+                                        Text="🗑" FontSize="16" 
+                                        BackgroundColor="Transparent" TextColor="Red"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeleteMeasurementCommand}" 
+                                        CommandParameter="{Binding .}" />
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
+
+        <VerticalStackLayout Grid.Row="2" Spacing="10" Padding="30,20,30,30">
+            <Button Text="+ Новые замеры" BackgroundColor="#2E8B57" TextColor="White" FontSize="16" FontAttributes="Bold" CornerRadius="25" HeightRequest="55" Command="{Binding GoToAddMeasurementCommand}" />
+            <Button Text="Назад" BackgroundColor="Transparent" TextColor="Gray" FontSize="14" CornerRadius="25" HeightRequest="45" BorderColor="#E0E0E0" BorderWidth="1" Command="{Binding GoBackCommand}" />
+        </VerticalStackLayout>
+    </Grid>
+</ContentPage>

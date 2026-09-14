@@ -5,81 +5,34 @@
              BackgroundColor="White">
 
     <Grid RowDefinitions="Auto, Auto, *, Auto">
-
-        <!-- Заголовок -->
         <VerticalStackLayout Grid.Row="0" Padding="30,40,30,20" Spacing="5">
-            <Label Text="Выбери упражнение"
-                   FontSize="28"
-                   FontAttributes="Bold"
-                   TextColor="#2E8B57" />
-            <Label Text="Используй фильтр для быстрого поиска"
-                   FontSize="14"
-                   TextColor="Gray" />
+            <Label Text="Выбери упражнение" FontSize="28" FontAttributes="Bold" TextColor="#2E8B57" />
+            <Label Text="Используй фильтр для быстрого поиска" FontSize="14" TextColor="Gray" />
         </VerticalStackLayout>
 
-        <!-- Фильтр по группе мышц -->
-        <Frame Grid.Row="1"
-               BackgroundColor="#F8FFF8"
-               CornerRadius="15"
-               Padding="15"
-               Margin="30,0,30,20"
-               HasShadow="False"
-               BorderColor="#E0E0E0">
-            <Picker Title="Выбери группу мышц"
-                    ItemsSource="{Binding MuscleGroups}"
-                    SelectedItem="{Binding SelectedMuscleGroup}"
-                    TextColor="#2E8B57" />
+        <Frame Grid.Row="1" BackgroundColor="#F8FFF8" CornerRadius="15" Padding="15" Margin="30,0,30,20" HasShadow="False" BorderColor="#E0E0E0">
+            <Picker Title="Выбери группу мышц" ItemsSource="{Binding MuscleGroups}" SelectedItem="{Binding SelectedMuscleGroup}" TextColor="#2E8B57" />
         </Frame>
 
-        <!-- Список упражнений -->
-        <CollectionView Grid.Row="2"
-                        ItemsSource="{Binding Exercises}"
-                        SelectionMode="None"
-                        Margin="20,0">
+        <CollectionView Grid.Row="2" ItemsSource="{Binding Exercises}" SelectionMode="None" Margin="20,0">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Frame BackgroundColor="#F8FFF8"
-                           CornerRadius="15"
-                           Padding="20"
-                           Margin="0,0,0,15"
-                           HasShadow="False"
-                           BorderColor="#E0E0E0">
+                    <Frame BackgroundColor="#F8FFF8" CornerRadius="15" Padding="20" Margin="0,0,0,15" HasShadow="False" BorderColor="#E0E0E0">
                         <Frame.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.SelectExerciseCommand}"
-                                                  CommandParameter="{Binding .}" />
+                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.SelectExerciseCommand}" CommandParameter="{Binding .}" />
                         </Frame.GestureRecognizers>
                         <Grid ColumnDefinitions="*, Auto">
                             <VerticalStackLayout Grid.Column="0" Spacing="5">
-                                <Label Text="{Binding Name}"
-                                       FontSize="18"
-                                       FontAttributes="Bold"
-                                       TextColor="#2E8B57" />
-                                <Label Text="{Binding Equipment}"
-                                       FontSize="14"
-                                       TextColor="Gray" />
+                                <Label Text="{Binding Name}" FontSize="18" FontAttributes="Bold" TextColor="#2E8B57" />
+                                <Label Text="{Binding Equipment}" FontSize="14" TextColor="Gray" />
                             </VerticalStackLayout>
-                            <Label Grid.Column="1"
-                                   Text="+"
-                                   FontSize="28"
-                                   TextColor="#2E8B57"
-                                   VerticalOptions="Center" />
+                            <Label Grid.Column="1" Text="+" FontSize="28" TextColor="#2E8B57" VerticalOptions="Center" />
                         </Grid>
                     </Frame>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
 
-        <!-- Кнопка назад -->
-        <Button Grid.Row="3"
-                Text="Отмена"
-                BackgroundColor="Transparent"
-                TextColor="Gray"
-                FontSize="14"
-                CornerRadius="25"
-                HeightRequest="45"
-                BorderColor="#E0E0E0"
-                BorderWidth="1"
-                Margin="30,20,30,30"
-                Command="{Binding GoBackCommand}" />
+        <Button Grid.Row="3" Text="Отмена" BackgroundColor="Transparent" TextColor="Gray" FontSize="14" CornerRadius="25" HeightRequest="45" BorderColor="#E0E0E0" BorderWidth="1" Margin="30,20,30,30" Command="{Binding GoBackCommand}" />
     </Grid>
 </ContentPage>

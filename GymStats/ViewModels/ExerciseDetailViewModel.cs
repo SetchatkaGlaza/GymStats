@@ -33,7 +33,6 @@ namespace GymStats.ViewModels
         {
             await _dbContext.Database.EnsureCreatedAsync();
 
-            // Загружаем название упражнения
             var workoutExercise = await _dbContext.WorkoutExercises
                 .Include(we => we.Exercise)
                 .FirstOrDefaultAsync(we => we.Id == WorkoutExerciseId);
@@ -43,7 +42,6 @@ namespace GymStats.ViewModels
                 ExerciseName = workoutExercise.Exercise.Name;
             }
 
-            // Загружаем подходы
             var sets = await _dbContext.Sets
                 .Where(s => s.WorkoutExerciseId == WorkoutExerciseId)
                 .OrderBy(s => s.Order)

@@ -50,9 +50,9 @@ namespace GymStats.ViewModels
             }
 
             var maxOrder = await _dbContext.Sets
-    .Where(s => s.WorkoutExerciseId == WorkoutExerciseId)
-    .Select(s => (int?)s.Order)
-    .MaxAsync() ?? 0;
+                .Where(s => s.WorkoutExerciseId == WorkoutExerciseId)
+                .Select(s => (int?)s.Order)
+                .MaxAsync() ?? 0;
 
             var newSet = new Set
             {

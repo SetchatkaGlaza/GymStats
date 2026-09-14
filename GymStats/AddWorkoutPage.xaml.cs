@@ -9,4 +9,13 @@ public partial class AddWorkoutPage : ContentPage
         InitializeComponent();
         BindingContext = viewModel;
     }
+
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+        if (BindingContext is AddWorkoutViewModel vm)
+        {
+            await vm.LoadTemplatesAsync();
+        }
+    }
 }

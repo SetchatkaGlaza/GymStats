@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="GymStats.TemplateDetailPage"
+             BackgroundColor="White">
+
+    <Grid RowDefinitions="Auto, *, Auto">
+
+        <!-- Заголовок -->
+        <VerticalStackLayout Grid.Row="0" Padding="30,40,30,20" Spacing="5">
+            <Label Text="{Binding TemplateName}"
+                   FontSize="28"
+                   FontAttributes="Bold"
+                   TextColor="#2E8B57" />
+            <Label Text="Упражнения в шаблоне"
+                   FontSize="14"
+                   TextColor="Gray" />
+        </VerticalStackLayout>
+
+        <!-- Список упражнений -->
+        <Grid Grid.Row="1">
+            <VerticalStackLayout IsVisible="{Binding IsListEmpty}"
+                                 VerticalOptions="Center"
+                                 HorizontalOptions="Center"
+                                 Spacing="10">
+                <Label Text="💪"
+                       FontSize="60"
+                       HorizontalOptions="Center" />
+                <Label Text="{Binding EmptyMessage}"
+                       FontSize="16"
+                       TextColor="Gray"
+                       HorizontalOptions="Center"
+                       HorizontalTextAlignment="Center" />
+            </VerticalStackLayout>
+
+            <CollectionView ItemsSource="{Binding TemplateExercises}"
+                            SelectionMode="None"
+                            Margin="20,0">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame BackgroundColor="#F8FFF8"
+                               CornerRadius="15"
+                               Padding="20"
+                               Margin="0,0,0,15"
+                               HasShadow="False"
+                               BorderColor="#E0E0E0">
+                            <Grid ColumnDefinitions="*, Auto">
+                                <VerticalStackLayout Grid.Column="0" Spacing="5">
+                                    <Label Text="{Binding Exercise.Name}"
+                                           FontSize="18"
+                                           FontAttributes="Bold"
+                                           TextColor="#2E8B57" />
+                                    <Label Text="{Binding Exercise.MuscleGroup}"
+                                           FontSize="14"
+                                           TextColor="Gray" />
+                                </VerticalStackLayout>
+                                <Label Grid.Column="1"
+                                       Text="→"
+                                       FontSize="24"
+                                       TextColor="#2E8B57"
+                                       VerticalOptions="Center" />
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Grid>
+
+        <!-- Кнопки -->
+        <VerticalStackLayout Grid.Row="2" Spacing="10" Padding="30,20,30,30">
+            <Button Text="+ Добавить упражнение"
+                    BackgroundColor="#2E8B57"
+                    TextColor="White"
+                    FontSize="16"
+                    FontAttributes="Bold"
+                    CornerRadius="25"
+                    HeightRequest="55"
+                    Command="{Binding GoToAddExerciseToTemplateCommand}" />
+            <Button Text="Назад"
+                    BackgroundColor="Transparent"
+                    TextColor="Gray"
+                    FontSize="14"
+                    CornerRadius="25"
+                    HeightRequest="45"
+                    BorderColor="#E0E0E0"
+                    BorderWidth="1"
+                    Command="{Binding GoBackCommand}" />
+        </VerticalStackLayout>
+    </Grid>
+</ContentPage>

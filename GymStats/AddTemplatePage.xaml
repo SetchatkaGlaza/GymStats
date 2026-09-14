@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="GymStats.AddTemplatePage"
+             BackgroundColor="White"
+             Title="Новый шаблон">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="30,40" Spacing="25">
+
+            <!-- Заголовок -->
+            <VerticalStackLayout Spacing="5">
+                <Label Text="Новый шаблон"
+                       FontSize="28"
+                       FontAttributes="Bold"
+                       TextColor="#2E8B57" />
+                <Label Text="Создай заготовку для тренировки"
+                       FontSize="14"
+                       TextColor="Gray" />
+            </VerticalStackLayout>
+
+            <!-- Карточка с полями -->
+            <Frame BackgroundColor="#F8FFF8"
+                   CornerRadius="20"
+                   Padding="25"
+                   HasShadow="False"
+                   BorderColor="#E0E0E0">
+                <VerticalStackLayout Spacing="20">
+
+                    <!-- Название -->
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Название шаблона"
+                               FontSize="14"
+                               TextColor="Gray" />
+                        <Entry Text="{Binding TemplateName}"
+                               Placeholder="Например: День груди"
+                               TextColor="#2E8B57"
+                               BackgroundColor="Transparent" />
+                    </VerticalStackLayout>
+
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Статус -->
+            <Label Text="{Binding StatusMessage}"
+                   FontSize="14"
+                   TextColor="#2E8B57"
+                   HorizontalOptions="Center"
+                   HorizontalTextAlignment="Center"
+                   IsVisible="{Binding IsStatusVisible}" />
+
+            <!-- Кнопки -->
+            <Button Text="Создать шаблон"
+                    BackgroundColor="#2E8B57"
+                    TextColor="White"
+                    FontSize="16"
+                    FontAttributes="Bold"
+                    CornerRadius="25"
+                    HeightRequest="55"
+                    Command="{Binding SaveTemplateCommand}" />
+            <Button Text="Отмена"
+                    BackgroundColor="Transparent"
+                    TextColor="Gray"
+                    FontSize="14"
+                    CornerRadius="25"
+                    HeightRequest="45"
+                    BorderColor="#E0E0E0"
+                    BorderWidth="1"
+                    Command="{Binding CancelCommand}" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

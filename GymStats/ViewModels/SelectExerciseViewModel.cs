@@ -31,9 +31,8 @@ namespace GymStats.ViewModels
 
         public async Task LoadExercisesAsync()
         {
-            await _dbContext.Database.EnsureCreatedAsync();
+            await _dbContext.SeedDataAsync(); // Гарантируем наличие данных
 
-            // Загружаем список групп мышц для фильтра
             var groups = await _dbContext.Exercises
                 .Select(e => e.MuscleGroup)
                 .Distinct()
@@ -48,18 +47,7 @@ namespace GymStats.ViewModels
             }
 
             SelectedMuscleGroup = "Все";
-
-            // Загружаем все упражнения
-            var allExercises = await _dbContext.Exercises
-                .OrderBy(e => e.MuscleGroup)
-                .ThenBy(e => e.Name)
-                .ToListAsync();
-
-            Exercises.Clear();
-            foreach (var exercise in allExercises)
-            {
-                Exercises.Add(exercise);
-            }
+            FilterExercises();
         }
 
         partial void OnSelectedMuscleGroupChanged(string value)
@@ -77,10 +65,7 @@ namespace GymStats.ViewModels
                     .ToListAsync();
 
                 Exercises.Clear();
-                foreach (var exercise in allExercises)
-                {
-                    Exercises.Add(exercise);
-                }
+                foreach (var exercise in allExercises) Exercises.Add(exercise);
             }
             else
             {
@@ -90,20 +75,17 @@ namespace GymStats.ViewModels
                     .ToListAsync();
 
                 Exercises.Clear();
-                foreach (var exercise in filtered)
-                {
-                    Exercises.Add(exercise);
-                }
+                foreach (var exercise in filtered) Exercises.Add(exercise);
             }
         }
 
         [RelayCommand]
         private async Task SelectExerciseAsync(Exercise exercise)
         {
-            // Добавляем упражнение в тренировку
             var maxOrder = await _dbContext.WorkoutExercises
                 .Where(we => we.WorkoutId == WorkoutId)
-                .MaxAsync(we => (int?)we.Order) ?? 0;
+                .Select(we => (int?)we.Order)
+                .MaxAsync() ?? 0;
 
             var workoutExercise = new WorkoutExercise
             {

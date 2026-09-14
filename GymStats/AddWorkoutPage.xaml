@@ -14,12 +14,12 @@
                        FontSize="28"
                        FontAttributes="Bold"
                        TextColor="#2E8B57" />
-                <Label Text="Заполни данные о тренировке"
+                <Label Text="Укажи дату и выбери шаблон"
                        FontSize="14"
                        TextColor="Gray" />
             </VerticalStackLayout>
 
-            <!-- Карточка с полями ввода -->
+            <!-- Карточка с полями -->
             <Frame BackgroundColor="#F8FFF8"
                    CornerRadius="20"
                    Padding="25"
@@ -27,7 +27,18 @@
                    BorderColor="#E0E0E0">
                 <VerticalStackLayout Spacing="20">
 
-                    <!-- Выбор даты -->
+                    <!-- Название -->
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Название"
+                               FontSize="14"
+                               TextColor="Gray" />
+                        <Entry Text="{Binding WorkoutName}"
+                               Placeholder="Например: День груди"
+                               TextColor="#2E8B57"
+                               BackgroundColor="Transparent" />
+                    </VerticalStackLayout>
+
+                    <!-- Дата -->
                     <VerticalStackLayout Spacing="5">
                         <Label Text="Дата тренировки"
                                FontSize="14"
@@ -38,24 +49,26 @@
                                     BackgroundColor="Transparent" />
                     </VerticalStackLayout>
 
-                    <!-- Заметки -->
+                    <!-- Выбор шаблона -->
                     <VerticalStackLayout Spacing="5">
-                        <Label Text="Заметки"
-                               FontSize="14"
-                               TextColor="Gray" />
-                        <Editor Text="{Binding Notes}"
-                                Placeholder="Как прошла тренировка? Какие ощущения?"
-                                PlaceholderColor="LightGray"
-                                TextColor="Black"
-                                BackgroundColor="White"
-                                HeightRequest="120"
-                                FontSize="16" />
-                    </VerticalStackLayout>
+                        <Label Text="Шаблон (опционально)"
+           FontSize="14"
+           TextColor="Gray" />
 
+                        <Picker ItemsSource="{Binding Templates}"
+            SelectedItem="{Binding SelectedTemplate}"
+            ItemDisplayBinding="{Binding Name}"
+            TextColor="#2E8B57"
+            BackgroundColor="Transparent">
+                            <Picker.Title>
+                                Выбери шаблон или оставь пустым
+                            </Picker.Title>
+                        </Picker>
+                    </VerticalStackLayout>
                 </VerticalStackLayout>
             </Frame>
 
-            <!-- Статусное сообщение -->
+            <!-- Статус -->
             <Label Text="{Binding StatusMessage}"
                    FontSize="14"
                    TextColor="#2E8B57"
@@ -63,8 +76,8 @@
                    HorizontalTextAlignment="Center"
                    IsVisible="{Binding IsStatusVisible}" />
 
-            <!-- Кнопка сохранения -->
-            <Button Text="Сохранить тренировку"
+            <!-- Кнопки -->
+            <Button Text="Создать и добавить упражнения"
                     BackgroundColor="#2E8B57"
                     TextColor="White"
                     FontSize="16"
@@ -72,8 +85,6 @@
                     CornerRadius="25"
                     HeightRequest="55"
                     Command="{Binding SaveWorkoutCommand}" />
-
-            <!-- Кнопка отмены -->
             <Button Text="Отмена"
                     BackgroundColor="Transparent"
                     TextColor="Gray"

@@ -11,7 +11,6 @@ namespace GymStats.ViewModels
     {
         private readonly AppDbContext _dbContext;
 
-        // Коллекция тренировок, которая будет отображаться в списке
         [ObservableProperty]
         private ObservableCollection<Workout> _workouts = new();
 
@@ -26,10 +25,9 @@ namespace GymStats.ViewModels
             _dbContext = dbContext;
         }
 
-        // Метод загрузки данных из БД
         public async Task LoadWorkoutsAsync()
         {
-            await _dbContext.Database.EnsureCreatedAsync();
+            await _dbContext.SeedDataAsync(); // Гарантируем заполнение базы
 
             var workoutList = await _dbContext.Workouts
                 .OrderByDescending(w => w.Date)
@@ -44,7 +42,6 @@ namespace GymStats.ViewModels
             IsListEmpty = Workouts.Count == 0;
         }
 
-        // Команда для перехода на страницу добавления
         [RelayCommand]
         private async Task GoToAddWorkoutAsync()
         {
@@ -55,6 +52,17 @@ namespace GymStats.ViewModels
         private async Task OpenWorkoutAsync(Workout workout)
         {
             await Shell.Current.GoToAsync($"AddExerciseToWorkoutPage?workoutId={workout.Id}");
+        }
+
+        [RelayCommand]
+        private async Task GoToTemplatesAsync()
+        {
+            await Shell.Current.GoToAsync("TemplateListPage");
+        }
+        [RelayCommand]
+        private async Task GoToAnthropometryAsync()
+        {
+            await Shell.Current.GoToAsync("AnthropometryPage");
         }
     }
 }
