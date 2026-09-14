@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="GymStats.AddWorkoutPage"
+             BackgroundColor="White"
+             Title="Новая тренировка">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="30,40" Spacing="25">
+
+            <!-- Заголовок -->
+            <VerticalStackLayout Spacing="5">
+                <Label Text="Новая тренировка"
+                       FontSize="28"
+                       FontAttributes="Bold"
+                       TextColor="#2E8B57" />
+                <Label Text="Заполни данные о тренировке"
+                       FontSize="14"
+                       TextColor="Gray" />
+            </VerticalStackLayout>
+
+            <!-- Карточка с полями ввода -->
+            <Frame BackgroundColor="#F8FFF8"
+                   CornerRadius="20"
+                   Padding="25"
+                   HasShadow="False"
+                   BorderColor="#E0E0E0">
+                <VerticalStackLayout Spacing="20">
+
+                    <!-- Выбор даты -->
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Дата тренировки"
+                               FontSize="14"
+                               TextColor="Gray" />
+                        <DatePicker Date="{Binding WorkoutDate}"
+                                    Format="dd MMMM yyyy"
+                                    TextColor="#2E8B57"
+                                    BackgroundColor="Transparent" />
+                    </VerticalStackLayout>
+
+                    <!-- Заметки -->
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Заметки"
+                               FontSize="14"
+                               TextColor="Gray" />
+                        <Editor Text="{Binding Notes}"
+                                Placeholder="Как прошла тренировка? Какие ощущения?"
+                                PlaceholderColor="LightGray"
+                                TextColor="Black"
+                                BackgroundColor="White"
+                                HeightRequest="120"
+                                FontSize="16" />
+                    </VerticalStackLayout>
+
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Статусное сообщение -->
+            <Label Text="{Binding StatusMessage}"
+                   FontSize="14"
+                   TextColor="#2E8B57"
+                   HorizontalOptions="Center"
+                   HorizontalTextAlignment="Center"
+                   IsVisible="{Binding IsStatusVisible}" />
+
+            <!-- Кнопка сохранения -->
+            <Button Text="Сохранить тренировку"
+                    BackgroundColor="#2E8B57"
+                    TextColor="White"
+                    FontSize="16"
+                    FontAttributes="Bold"
+                    CornerRadius="25"
+                    HeightRequest="55"
+                    Command="{Binding SaveWorkoutCommand}" />
+
+            <!-- Кнопка отмены -->
+            <Button Text="Отмена"
+                    BackgroundColor="Transparent"
+                    TextColor="Gray"
+                    FontSize="14"
+                    CornerRadius="25"
+                    HeightRequest="45"
+                    BorderColor="#E0E0E0"
+                    BorderWidth="1"
+                    Command="{Binding CancelCommand}" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

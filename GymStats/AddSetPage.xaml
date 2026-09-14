@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="GymStats.AddSetPage"
+             BackgroundColor="White">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="30,40" Spacing="25">
+
+            <!-- Заголовок -->
+            <VerticalStackLayout Spacing="5">
+                <Label Text="Новый подход"
+                       FontSize="28"
+                       FontAttributes="Bold"
+                       TextColor="#2E8B57" />
+                <Label Text="Заполни параметры подхода"
+                       FontSize="14"
+                       TextColor="Gray" />
+            </VerticalStackLayout>
+
+            <!-- Карточка с полями -->
+            <Frame BackgroundColor="#F8FFF8"
+                   CornerRadius="20"
+                   Padding="25"
+                   HasShadow="False"
+                   BorderColor="#E0E0E0">
+                <VerticalStackLayout Spacing="20">
+
+                    <!-- Вес -->
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Вес (кг)"
+                               FontSize="14"
+                               TextColor="Gray" />
+                        <Entry Text="{Binding Weight}"
+                               Placeholder="0.0"
+                               Keyboard="Numeric"
+                               FontSize="18"
+                               TextColor="#2E8B57" />
+                    </VerticalStackLayout>
+
+                    <!-- Повторения -->
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Количество повторений"
+                               FontSize="14"
+                               TextColor="Gray" />
+                        <Entry Text="{Binding Reps}"
+                               Placeholder="0"
+                               Keyboard="Numeric"
+                               FontSize="18"
+                               TextColor="#2E8B57" />
+                    </VerticalStackLayout>
+
+                    <!-- RPE -->
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Rpe (1-10)"
+                               FontSize="14"
+                               TextColor="Gray" />
+                        <Entry Text="{Binding Rpe}"
+                               Placeholder="7"
+                               Keyboard="Numeric"
+                               FontSize="18"
+                               TextColor="#2E8B57" />
+                    </VerticalStackLayout>
+
+                    <!-- Темп -->
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Темп (например, 3-1-1-0)"
+                               FontSize="14"
+                               TextColor="Gray" />
+                        <Entry Text="{Binding Tempo}"
+                               Placeholder="3-1-1-0"
+                               FontSize="18"
+                               TextColor="#2E8B57" />
+                    </VerticalStackLayout>
+
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Статус -->
+            <Label Text="{Binding StatusMessage}"
+                   FontSize="14"
+                   TextColor="#2E8B57"
+                   HorizontalOptions="Center"
+                   HorizontalTextAlignment="Center"
+                   IsVisible="{Binding IsStatusVisible}" />
+
+            <!-- Кнопки -->
+            <Button Text="Сохранить подход"
+                    BackgroundColor="#2E8B57"
+                    TextColor="White"
+                    FontSize="16"
+                    FontAttributes="Bold"
+                    CornerRadius="25"
+                    HeightRequest="55"
+                    Command="{Binding SaveSetCommand}" />
+            <Button Text="Отмена"
+                    BackgroundColor="Transparent"
+                    TextColor="Gray"
+                    FontSize="14"
+                    CornerRadius="25"
+                    HeightRequest="45"
+                    BorderColor="#E0E0E0"
+                    BorderWidth="1"
+                    Command="{Binding CancelCommand}" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
