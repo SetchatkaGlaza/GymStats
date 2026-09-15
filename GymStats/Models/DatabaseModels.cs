@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Collections.Generic;
 
 namespace GymStats.Models
@@ -47,8 +46,6 @@ namespace GymStats.Models
         public DateTime Date { get; set; } = DateTime.Now;
         public string Name { get; set; } = "Тренировка";
         public string Notes { get; set; } = string.Empty;
-        
-        // Навигационное свойство
         public ICollection<WorkoutExercise> WorkoutExercises { get; set; } = new List<WorkoutExercise>();
     }
 
@@ -59,9 +56,7 @@ namespace GymStats.Models
         public int WorkoutId { get; set; }
         public int ExerciseId { get; set; }
         public int Order { get; set; }
-        
-        // Навигационные свойства (ИСПРАВЛЕНО)
-        public Workout Workout { get; set; } = null!; 
+        public Workout Workout { get; set; } = null!;
         public Exercise Exercise { get; set; } = null!;
         public ICollection<Set> Sets { get; set; } = new List<Set>();
     }
@@ -76,7 +71,6 @@ namespace GymStats.Models
         public int RPE { get; set; }
         public string Tempo { get; set; } = string.Empty;
         public int Order { get; set; }
-
         public WorkoutExercise WorkoutExercise { get; set; } = null!;
     }
 
@@ -102,6 +96,6 @@ namespace GymStats.Models
         public DateTime Date { get; set; } = DateTime.Now;
         public string FilePath { get; set; } = string.Empty;
         public string Description { get; set; } = string.Empty;
-        public string MediaType { get; set; } = string.Empty;
+        public string MediaType { get; set; } = "Photo";
     }
 }

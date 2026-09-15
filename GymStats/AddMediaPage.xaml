@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="GymStats.AddMediaPage"
+             BackgroundColor="White">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="30,40" Spacing="25">
+            <VerticalStackLayout Spacing="5">
+                <Label Text="Новое фото" FontSize="28" FontAttributes="Bold" TextColor="#2E8B57" />
+                <Label Text="Зафиксируй свой прогресс" FontSize="14" TextColor="Gray" />
+            </VerticalStackLayout>
+
+            <!-- Кнопка выбора фото -->
+            <Frame BackgroundColor="#F8FFF8" CornerRadius="20" Padding="25" HasShadow="False" BorderColor="#E0E0E0">
+                <VerticalStackLayout Spacing="15">
+                    <Button Text="📸 Выбрать фото из галереи" 
+                            BackgroundColor="#2E8B57" TextColor="White" 
+                            FontSize="16" FontAttributes="Bold" 
+                            CornerRadius="15" HeightRequest="50" 
+                            Command="{Binding PickPhotoCommand}" />
+
+                    <!-- Превью выбранного фото -->
+                    <Image Source="{Binding ImageSource}" 
+                           Aspect="AspectFit" 
+                           HeightRequest="250" 
+                           IsVisible="{Binding IsImageSelected}" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Поля ввода -->
+            <Frame BackgroundColor="#F8FFF8" CornerRadius="20" Padding="25" HasShadow="False" BorderColor="#E0E0E0">
+                <VerticalStackLayout Spacing="15">
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Дата" FontSize="14" TextColor="Gray" />
+                        <DatePicker Date="{Binding MediaDate}" Format="dd MMMM yyyy" TextColor="#2E8B57" />
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Описание" FontSize="14" TextColor="Gray" />
+                        <Editor Text="{Binding Description}" Placeholder="Например: Вес 80кг, отлично виден рельеф..." HeightRequest="100" TextColor="Black" />
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
+
+            <Label Text="{Binding StatusMessage}" FontSize="14" TextColor="#2E8B57" HorizontalOptions="Center" IsVisible="{Binding IsStatusVisible}" />
+
+            <Button Text="Сохранить фото" BackgroundColor="#2E8B57" TextColor="White" FontSize="16" FontAttributes="Bold" CornerRadius="25" HeightRequest="55" Command="{Binding SaveMediaCommand}" />
+            <Button Text="Назад" BackgroundColor="Transparent" TextColor="Gray" FontSize="14" CornerRadius="25" HeightRequest="45" BorderColor="#E0E0E0" BorderWidth="1" Command="{Binding CancelCommand}" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

@@ -43,6 +43,8 @@ namespace GymStats
             builder.Services.AddTransient<AnalyticsPage>(); // ДОБАВИТЬ
             builder.Services.AddTransient<ExerciseProgressPage>(); // ДОБАВИТЬ
             builder.Services.AddTransient<BodyWeightProgressPage>(); // ДОБАВИТЬ
+            builder.Services.AddTransient<MediaArchivePage>(); // ДОБАВИТЬ
+            builder.Services.AddTransient<AddMediaPage>(); // ДОБАВИТЬ
 
             // ViewModel
             builder.Services.AddTransient<MainPageViewModel>();
@@ -61,6 +63,8 @@ namespace GymStats
             builder.Services.AddTransient<AnalyticsViewModel>(); // ДОБАВИТЬ
             builder.Services.AddTransient<ExerciseProgressViewModel>(); // ДОБАВИТЬ
             builder.Services.AddTransient<BodyWeightProgressViewModel>(); // ДОБАВИТЬ
+            builder.Services.AddTransient<MediaArchiveViewModel>(); // ДОБАВИТЬ
+            builder.Services.AddTransient<AddMediaViewModel>(); // ДОБАВИТЬ
 
 #if DEBUG
             builder.Logging.AddDebug();

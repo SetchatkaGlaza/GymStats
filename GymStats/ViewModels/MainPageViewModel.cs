@@ -55,6 +55,12 @@ namespace GymStats.ViewModels
         }
 
         [RelayCommand]
+        private async Task GoToMediaArchiveAsync()
+        {
+            await Shell.Current.GoToAsync("MediaArchivePage");
+        }
+
+        [RelayCommand]
         private async Task OpenWorkoutAsync(Workout workout)
         {
             await Shell.Current.GoToAsync($"AddExerciseToWorkoutPage?workoutId={workout.Id}");
