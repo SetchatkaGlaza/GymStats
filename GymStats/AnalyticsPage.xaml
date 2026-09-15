@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="GymStats.AnalyticsPage"
+             BackgroundColor="White">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="30,40" Spacing="25">
+            <VerticalStackLayout Spacing="5">
+                <Label Text="Аналитика" FontSize="28" FontAttributes="Bold" TextColor="#2E8B57" />
+                <Label Text="Отслеживай свой прогресс" FontSize="14" TextColor="Gray" />
+            </VerticalStackLayout>
+
+            <Frame BackgroundColor="#F8FFF8" CornerRadius="20" Padding="25" HasShadow="False" BorderColor="#E0E0E0">
+                <VerticalStackLayout Spacing="15">
+                    <Button Text="🏋️ Прогресс в упражнениях" 
+                            BackgroundColor="#2E8B57" TextColor="White" 
+                            FontSize="16" FontAttributes="Bold" 
+                            CornerRadius="15" HeightRequest="55" 
+                            Command="{Binding GoToExerciseProgressCommand}" />
+
+                    <Button Text="️ Динамика веса тела" 
+                            BackgroundColor="White" TextColor="#2E8B57" 
+                            FontSize="16" FontAttributes="Bold" 
+                            CornerRadius="15" HeightRequest="55" 
+                            BorderColor="#2E8B57" BorderWidth="2"
+                            Command="{Binding GoToBodyWeightProgressCommand}" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <Button Text="Назад" BackgroundColor="Transparent" TextColor="Gray" FontSize="14" CornerRadius="25" HeightRequest="45" BorderColor="#E0E0E0" BorderWidth="1" Command="{Binding GoBackCommand}" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

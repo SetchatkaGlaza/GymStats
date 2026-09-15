@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using GymStats.Data;
 using GymStats.ViewModels;
+using Microcharts.Maui; // ДОБАВИТЬ
 
 namespace GymStats
 {
@@ -16,7 +17,8 @@ namespace GymStats
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-                });
+                })
+                .UseMicrocharts(); // ДОБАВИТЬ ЭТУ СТРОКУ
 
             var dbPath = Path.Combine(FileSystem.AppDataDirectory, "gymstats.db3");
             builder.Services.AddDbContext<AppDbContext>(options =>
@@ -36,8 +38,11 @@ namespace GymStats
             builder.Services.AddTransient<AddTemplatePage>();
             builder.Services.AddTransient<TemplateDetailPage>();
             builder.Services.AddTransient<SelectExerciseForTemplatePage>();
-            builder.Services.AddTransient<AnthropometryPage>(); // ДОБАВИТЬ
-            builder.Services.AddTransient<AddMeasurementPage>(); // ДОБАВИТЬ
+            builder.Services.AddTransient<AnthropometryPage>();
+            builder.Services.AddTransient<AddMeasurementPage>();
+            builder.Services.AddTransient<AnalyticsPage>(); // ДОБАВИТЬ
+            builder.Services.AddTransient<ExerciseProgressPage>(); // ДОБАВИТЬ
+            builder.Services.AddTransient<BodyWeightProgressPage>(); // ДОБАВИТЬ
 
             // ViewModel
             builder.Services.AddTransient<MainPageViewModel>();
@@ -51,8 +56,11 @@ namespace GymStats
             builder.Services.AddTransient<AddTemplateViewModel>();
             builder.Services.AddTransient<TemplateDetailViewModel>();
             builder.Services.AddTransient<SelectExerciseForTemplateViewModel>();
-            builder.Services.AddTransient<AnthropometryViewModel>(); // ДОБАВИТЬ
-            builder.Services.AddTransient<AddMeasurementViewModel>(); // ДОБАВИТЬ
+            builder.Services.AddTransient<AnthropometryViewModel>();
+            builder.Services.AddTransient<AddMeasurementViewModel>();
+            builder.Services.AddTransient<AnalyticsViewModel>(); // ДОБАВИТЬ
+            builder.Services.AddTransient<ExerciseProgressViewModel>(); // ДОБАВИТЬ
+            builder.Services.AddTransient<BodyWeightProgressViewModel>(); // ДОБАВИТЬ
 
 #if DEBUG
             builder.Logging.AddDebug();

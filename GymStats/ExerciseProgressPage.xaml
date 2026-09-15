@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:microcharts="clr-namespace:Microcharts.Maui;assembly=Microcharts.Maui"
+             x:Class="GymStats.ExerciseProgressPage"
+             BackgroundColor="White">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="30,40" Spacing="25">
+            <VerticalStackLayout Spacing="5">
+                <Label Text="Прогресс упражнений" FontSize="28" FontAttributes="Bold" TextColor="#2E8B57" />
+                <Label Text="Выбери упражнение для анализа" FontSize="14" TextColor="Gray" />
+            </VerticalStackLayout>
+
+            <Frame BackgroundColor="#F8FFF8" CornerRadius="20" Padding="25" HasShadow="False" BorderColor="#E0E0E0">
+                <VerticalStackLayout Spacing="15">
+                    <Picker Title="Выбери упражнение" 
+                            ItemsSource="{Binding Exercises}" 
+                            SelectedItem="{Binding SelectedExercise}" 
+                            ItemDisplayBinding="{Binding Name}"
+                            TextColor="#2E8B57" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <Frame BackgroundColor="White" CornerRadius="20" Padding="15" HasShadow="True" BorderColor="#E0E0E0" IsVisible="{Binding IsChartVisible}">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="{Binding ChartTitle}" FontSize="16" FontAttributes="Bold" TextColor="#2E8B57" HorizontalOptions="Center" />
+                    <microcharts:ChartView Chart="{Binding ExerciseChart}" HeightRequest="300" />
+                </VerticalStackLayout>
+            </Frame>
+
+            <Label Text="Нет данных для графика" FontSize="16" TextColor="Gray" HorizontalOptions="Center" IsVisible="{Binding IsChartVisible, Converter={StaticResource InverseBoolConverter}}" />
+
+            <Button Text="Назад" BackgroundColor="Transparent" TextColor="Gray" FontSize="14" CornerRadius="25" HeightRequest="45" BorderColor="#E0E0E0" BorderWidth="1" Command="{Binding GoBackCommand}" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

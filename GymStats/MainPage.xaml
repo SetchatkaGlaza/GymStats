@@ -35,24 +35,11 @@
         </Grid>
 
         <VerticalStackLayout Grid.Row="2" Spacing="10" Padding="30,20,30,30">
-            <Button Text="+ Новая тренировка"
-            BackgroundColor="#2E8B57"
-            TextColor="White"
-            FontSize="16"
-            FontAttributes="Bold"
-            CornerRadius="25"
-            HeightRequest="55"
-            Command="{Binding GoToAddWorkoutCommand}" />
-            <Button Text="📋 Шаблоны тренировок"
-            BackgroundColor="Transparent"
-            TextColor="#2E8B57"
-            FontSize="14"
-            CornerRadius="25"
-            HeightRequest="45"
-            BorderColor="#2E8B57"
-            BorderWidth="1"
-            Command="{Binding GoToTemplatesCommand}" />
+            <Button Text="+ Новая тренировка" BackgroundColor="#2E8B57" TextColor="White" FontSize="16" FontAttributes="Bold" CornerRadius="25" HeightRequest="55" Command="{Binding GoToAddWorkoutCommand}" />
+            <Button Text=" Шаблоны тренировок" BackgroundColor="Transparent" TextColor="#2E8B57" FontSize="14" CornerRadius="25" HeightRequest="45" BorderColor="#2E8B57" BorderWidth="1" Command="{Binding GoToTemplatesCommand}" />
             <Button Text="📏 Замеры тела" BackgroundColor="Transparent" TextColor="#2E8B57" FontSize="14" CornerRadius="25" HeightRequest="45" BorderColor="#2E8B57" BorderWidth="1" Command="{Binding GoToAnthropometryCommand}" />
+            <!-- ДОБАВИТЬ ЭТУ КНОПКУ -->
+            <Button Text="📈 Аналитика и графики" BackgroundColor="Transparent" TextColor="#2E8B57" FontSize="14" CornerRadius="25" HeightRequest="45" BorderColor="#2E8B57" BorderWidth="1" Command="{Binding GoToAnalyticsCommand}" />
         </VerticalStackLayout>
     </Grid>
 </ContentPage>

@@ -47,6 +47,9 @@ namespace GymStats.Models
         public DateTime Date { get; set; } = DateTime.Now;
         public string Name { get; set; } = "Тренировка";
         public string Notes { get; set; } = string.Empty;
+        
+        // Навигационное свойство
+        public ICollection<WorkoutExercise> WorkoutExercises { get; set; } = new List<WorkoutExercise>();
     }
 
     public class WorkoutExercise
@@ -56,7 +59,11 @@ namespace GymStats.Models
         public int WorkoutId { get; set; }
         public int ExerciseId { get; set; }
         public int Order { get; set; }
+        
+        // Навигационные свойства (ИСПРАВЛЕНО)
+        public Workout Workout { get; set; } = null!; 
         public Exercise Exercise { get; set; } = null!;
+        public ICollection<Set> Sets { get; set; } = new List<Set>();
     }
 
     public class Set
@@ -69,6 +76,8 @@ namespace GymStats.Models
         public int RPE { get; set; }
         public string Tempo { get; set; } = string.Empty;
         public int Order { get; set; }
+
+        public WorkoutExercise WorkoutExercise { get; set; } = null!;
     }
 
     public class BodyMeasurement
@@ -83,7 +92,7 @@ namespace GymStats.Models
         public double Biceps { get; set; }
         public double Thigh { get; set; }
         public double Calf { get; set; }
-        public double Neck { get; set; } // Новое поле
+        public double Neck { get; set; }
     }
 
     public class MediaEntry

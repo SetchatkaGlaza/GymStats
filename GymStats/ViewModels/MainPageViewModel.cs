@@ -49,6 +49,12 @@ namespace GymStats.ViewModels
         }
 
         [RelayCommand]
+        private async Task GoToAnalyticsAsync()
+        {
+            await Shell.Current.GoToAsync("AnalyticsPage");
+        }
+
+        [RelayCommand]
         private async Task OpenWorkoutAsync(Workout workout)
         {
             await Shell.Current.GoToAsync($"AddExerciseToWorkoutPage?workoutId={workout.Id}");
