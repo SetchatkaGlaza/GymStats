@@ -4,47 +4,25 @@
              x:Class="GymStats.MediaPage"
              Title="Прогресс">
     <Grid RowDefinitions="Auto,*,Auto">
-        <VerticalStackLayout Padding="22,28,22,16" Spacing="4">
-            <Label Text="Прогресс" Style="{StaticResource PageTitle}" />
-            <Label Text="Фото и видео остаются на твоём устройстве." Style="{StaticResource PageSubtitle}" />
-        </VerticalStackLayout>
+        <VerticalStackLayout Padding="22,28,22,16" Spacing="4"><Label Text="Прогресс" Style="{StaticResource PageTitle}" /><Label Text="Фото и видео остаются на твоём устройстве." Style="{StaticResource PageSubtitle}" /></VerticalStackLayout>
         <CollectionView Grid.Row="1" ItemsSource="{Binding Entries}" Margin="22,0" SelectionMode="None">
-            <CollectionView.EmptyView>
-                <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="8">
-                    <Label Text="◌" Style="{StaticResource EmptyIcon}" />
-                    <Label Text="Добавь первое фото или видео прогресса." Style="{StaticResource EmptyText}" />
-                </VerticalStackLayout>
-            </CollectionView.EmptyView>
+            <CollectionView.EmptyView><VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="8"><Label Text="◌" Style="{StaticResource EmptyIcon}" /><Label Text="Добавь первое фото или видео прогресса." Style="{StaticResource EmptyText}" /></VerticalStackLayout></CollectionView.EmptyView>
             <CollectionView.ItemTemplate>
                 <DataTemplate>
                     <Border Style="{StaticResource Card}" Margin="0,0,0,12">
-                        <Grid ColumnDefinitions="100,*,Auto" ColumnSpacing="12">
+                        <Grid ColumnDefinitions="100,*,Auto,Auto" ColumnSpacing="8">
                             <Grid Grid.Column="0" HeightRequest="100" WidthRequest="100">
-                                <Image Source="{Binding FilePath}" Aspect="AspectFill">
-                                    <Image.Triggers>
-                                        <DataTrigger TargetType="Image" Binding="{Binding MediaType}" Value="video"><Setter Property="IsVisible" Value="False" /></DataTrigger>
-                                    </Image.Triggers>
-                                </Image>
-                                <Label Text="VIDEO" TextColor="{StaticResource Primary}" FontFamily="OpenSansSemibold" HorizontalOptions="Center" VerticalOptions="Center">
-                                    <Label.Triggers>
-                                        <DataTrigger TargetType="Label" Binding="{Binding MediaType}" Value="image"><Setter Property="IsVisible" Value="False" /></DataTrigger>
-                                    </Label.Triggers>
-                                </Label>
+                                <Image Source="{Binding FilePath}" Aspect="AspectFill"><Image.Triggers><DataTrigger TargetType="Image" Binding="{Binding MediaType}" Value="video"><Setter Property="IsVisible" Value="False" /></DataTrigger></Image.Triggers></Image>
+                                <Label Text="VIDEO" TextColor="{StaticResource Primary}" FontFamily="OpenSansSemibold" HorizontalOptions="Center" VerticalOptions="Center"><Label.Triggers><DataTrigger TargetType="Label" Binding="{Binding MediaType}" Value="image"><Setter Property="IsVisible" Value="False" /></DataTrigger></Label.Triggers></Label>
                             </Grid>
-                            <VerticalStackLayout Grid.Column="1" Spacing="3">
-                                <Label Text="{Binding MediaType}" Style="{StaticResource Badge}" />
-                                <Label Text="{Binding Date, StringFormat='{0:dd.MM.yyyy HH:mm}'}" Style="{StaticResource CardTitle}" />
-                                <Label Text="{Binding Description}" Style="{StaticResource CardMeta}" LineBreakMode="TailTruncation" />
-                            </VerticalStackLayout>
-                            <Button Grid.Column="2" Text="⋯" Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.OpenCommand}" CommandParameter="{Binding .}" Style="{StaticResource IconButton}" />
+                            <VerticalStackLayout Grid.Column="1" Spacing="3"><Label Text="{Binding MediaType}" Style="{StaticResource Badge}" /><Label Text="{Binding Date, StringFormat='{0:dd.MM.yyyy HH:mm}'}" Style="{StaticResource CardTitle}" /><Label Text="{Binding Description}" Style="{StaticResource CardMeta}" LineBreakMode="TailTruncation" /></VerticalStackLayout>
+                            <Button Grid.Column="2" Text="↗" Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.OpenCommand}" CommandParameter="{Binding .}" Style="{StaticResource IconButton}" />
+                            <Button Grid.Column="3" Text="×" Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeleteCommand}" CommandParameter="{Binding .}" Style="{StaticResource IconButton}" />
                         </Grid>
                     </Border>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
-        <Grid Grid.Row="2" ColumnDefinitions="*,*" ColumnSpacing="10" Padding="22,14,22,22">
-            <Button Text="+ Фото" Command="{Binding AddPhotoCommand}" Style="{StaticResource PrimaryButton}" />
-            <Button Grid.Column="1" Text="+ Видео" Command="{Binding AddVideoCommand}" Style="{StaticResource SecondaryButton}" />
-        </Grid>
+        <Grid Grid.Row="2" ColumnDefinitions="*,*" ColumnSpacing="10" Padding="22,14,22,22"><Button Text="+ Фото" Command="{Binding AddPhotoCommand}" Style="{StaticResource PrimaryButton}" /><Button Grid.Column="1" Text="+ Видео" Command="{Binding AddVideoCommand}" Style="{StaticResource SecondaryButton}" /></Grid>
     </Grid>
 </ContentPage>
