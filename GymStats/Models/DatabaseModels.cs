@@ -13,7 +13,6 @@ public class Exercise
     public string Description { get; set; } = string.Empty;
     public bool IsCustom { get; set; }
 }
-
 public class WorkoutTemplate
 {
     [Key] public int Id { get; set; }
@@ -21,7 +20,6 @@ public class WorkoutTemplate
     public DateTime CreatedAt { get; set; } = DateTime.Now;
     public ICollection<TemplateExercise> TemplateExercises { get; set; } = new List<TemplateExercise>();
 }
-
 public class TemplateExercise
 {
     [Key] public int Id { get; set; }
@@ -36,7 +34,6 @@ public class TemplateExercise
     public WorkoutTemplate Template { get; set; } = null!;
     public Exercise Exercise { get; set; } = null!;
 }
-
 public class Workout
 {
     [Key] public int Id { get; set; }
@@ -45,16 +42,18 @@ public class Workout
     public string Name { get; set; } = "Тренировка";
     public string Notes { get; set; } = string.Empty;
 }
-
 public class WorkoutExercise
 {
     [Key] public int Id { get; set; }
     public int WorkoutId { get; set; }
     public int ExerciseId { get; set; }
     public int Order { get; set; }
+    public int TargetSets { get; set; }
+    public int TargetReps { get; set; }
+    public double TargetWeight { get; set; }
+    public int TargetRPE { get; set; }
     public Exercise Exercise { get; set; } = null!;
 }
-
 public class Set
 {
     [Key] public int Id { get; set; }
@@ -65,7 +64,6 @@ public class Set
     public string Tempo { get; set; } = string.Empty;
     public int Order { get; set; }
 }
-
 public class BodyMeasurement
 {
     [Key] public int Id { get; set; }
@@ -79,7 +77,6 @@ public class BodyMeasurement
     public double Calf { get; set; }
     public double Neck { get; set; }
 }
-
 public class MediaEntry
 {
     [Key] public int Id { get; set; }
