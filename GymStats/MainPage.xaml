@@ -1,58 +1,71 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="GymStats.MainPage"
-             BackgroundColor="White">
+             Title="GymStats">
+    <ScrollView>
+        <VerticalStackLayout Style="{StaticResource PageContent}" Spacing="18">
+            <Grid ColumnDefinitions="*,Auto">
+                <VerticalStackLayout Spacing="3">
+                    <Label Text="GymStats" Style="{StaticResource PageTitle}" />
+                    <Label Text="Твоя история. Твои цифры. Твой прогресс." Style="{StaticResource PageSubtitle}" />
+                </VerticalStackLayout>
+                <Button Grid.Column="1" Text="↗" Command="{Binding GoToBackupCommand}" Style="{StaticResource IconButton}" />
+            </Grid>
 
-    <Grid RowDefinitions="Auto, *, Auto">
-        <VerticalStackLayout Grid.Row="0" Padding="30,40,30,20" Spacing="5">
-            <Label Text="GymStats" FontSize="32" FontAttributes="Bold" TextColor="#2E8B57" />
-            <Label Text="История тренировок" FontSize="14" TextColor="Gray" />
-        </VerticalStackLayout>
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                <Border Style="{StaticResource StatCard}">
+                    <VerticalStackLayout><Label Text="Тренировок" Style="{StaticResource StatLabel}" /><Label Text="{Binding WorkoutCount}" Style="{StaticResource StatValue}" /></VerticalStackLayout>
+                </Border>
+                <Border Grid.Column="1" Style="{StaticResource StatCard}">
+                    <VerticalStackLayout><Label Text="Общий тоннаж" Style="{StaticResource StatLabel}" /><Label Text="{Binding TotalVolume, StringFormat='{0:N0} кг'}" Style="{StaticResource StatValue}" /></VerticalStackLayout>
+                </Border>
+            </Grid>
 
-        <Grid Grid.Row="1">
-            <VerticalStackLayout IsVisible="{Binding IsListEmpty}" VerticalOptions="Center" HorizontalOptions="Center" Spacing="10">
-                <Label Text="🏋️" FontSize="60" HorizontalOptions="Center" />
-                <Label Text="{Binding EmptyMessage}" FontSize="16" TextColor="Gray" HorizontalOptions="Center" HorizontalTextAlignment="Center" />
-            </VerticalStackLayout>
+            <Border Style="{StaticResource Card}">
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="Готов к следующей тренировке?" Style="{StaticResource SectionTitle}" />
+                    <Label Text="{Binding LastWorkoutDate, StringFormat='Последняя: {0:dd.MM.yyyy}'}" Style="{StaticResource CardMeta}" />
+                    <Button Text="+ Начать тренировку" Command="{Binding GoToAddWorkoutCommand}" Style="{StaticResource PrimaryButton}" />
+                </VerticalStackLayout>
+            </Border>
 
-            <CollectionView ItemsSource="{Binding Workouts}" SelectionMode="None" Margin="20,0">
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                <Button Text="Аналитика" Command="{Binding GoToAnalyticsCommand}" Style="{StaticResource SecondaryButton}" />
+                <Button Grid.Column="1" Text="Прогресс" Command="{Binding GoToMediaCommand}" Style="{StaticResource SecondaryButton}" />
+            </Grid>
+
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                <Button Text="Замеры" Command="{Binding GoToAnthropometryCommand}" Style="{StaticResource SecondaryButton}" />
+                <Button Grid.Column="1" Text="Шаблоны" Command="{Binding GoToTemplatesCommand}" Style="{StaticResource SecondaryButton}" />
+            </Grid>
+
+            <Label Text="Последние тренировки" Style="{StaticResource SectionTitle}" />
+
+            <CollectionView ItemsSource="{Binding Workouts}" SelectionMode="None" HeightRequest="320">
+                <CollectionView.EmptyView>
+                    <VerticalStackLayout Padding="10,40" Spacing="8">
+                        <Label Text="🏋️" Style="{StaticResource EmptyIcon}" />
+                        <Label Text="Пока нет тренировок. Создай первую — приложение само начнёт собирать статистику." Style="{StaticResource EmptyText}" />
+                    </VerticalStackLayout>
+                </CollectionView.EmptyView>
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Frame BackgroundColor="#F8FFF8" CornerRadius="15" Padding="20" Margin="0,0,0,15" HasShadow="False" BorderColor="#E0E0E0">
-                            <Frame.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.OpenWorkoutCommand}" CommandParameter="{Binding .}" />
-                            </Frame.GestureRecognizers>
-                            <Grid ColumnDefinitions="*, Auto" RowDefinitions="Auto, Auto">
-                                <Label Grid.Row="0" Grid.Column="0" Text="{Binding Name}" FontSize="18" FontAttributes="Bold" TextColor="#2E8B57" />
-                                <Label Grid.Row="1" Grid.Column="0" Text="{Binding Date, StringFormat='{0:dd MMMM yyyy}'}" FontSize="14" TextColor="DimGray" />
-                                <Label Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" Text="→" FontSize="24" TextColor="#2E8B57" VerticalOptions="Center" />
+                        <Border Style="{StaticResource Card}" Margin="0,0,0,10">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <VerticalStackLayout>
+                                    <Label Text="{Binding Name}" Style="{StaticResource CardTitle}" />
+                                    <Label Text="{Binding Date, StringFormat='{0:dd MMMM yyyy}'}" Style="{StaticResource CardMeta}" />
+                                </VerticalStackLayout>
+                                <Label Grid.Column="1" Text="›" FontSize="28" TextColor="{StaticResource Primary}" VerticalOptions="Center" />
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.OpenWorkoutCommand}" CommandParameter="{Binding .}" />
+                                </Grid.GestureRecognizers>
                             </Grid>
-                        </Frame>
+                        </Border>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
-        </Grid>
-
-        <VerticalStackLayout Grid.Row="2" Spacing="10" Padding="30,20,30,30">
-            <Button Text="+ Новая тренировка"
-            BackgroundColor="#2E8B57"
-            TextColor="White"
-            FontSize="16"
-            FontAttributes="Bold"
-            CornerRadius="25"
-            HeightRequest="55"
-            Command="{Binding GoToAddWorkoutCommand}" />
-            <Button Text="📋 Шаблоны тренировок"
-            BackgroundColor="Transparent"
-            TextColor="#2E8B57"
-            FontSize="14"
-            CornerRadius="25"
-            HeightRequest="45"
-            BorderColor="#2E8B57"
-            BorderWidth="1"
-            Command="{Binding GoToTemplatesCommand}" />
-            <Button Text="📏 Замеры тела" BackgroundColor="Transparent" TextColor="#2E8B57" FontSize="14" CornerRadius="25" HeightRequest="45" BorderColor="#2E8B57" BorderWidth="1" Command="{Binding GoToAnthropometryCommand}" />
         </VerticalStackLayout>
-    </Grid>
+    </ScrollView>
 </ContentPage>
