@@ -2,68 +2,31 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="GymStats.AddMeasurementPage"
-             BackgroundColor="White">
-
+             Title="Новые замеры">
     <ScrollView>
-        <VerticalStackLayout Padding="30,40" Spacing="25">
-            <VerticalStackLayout Spacing="5">
-                <Label Text="Новые замеры" FontSize="28" FontAttributes="Bold" TextColor="#2E8B57" />
-                <Label Text="Внеси актуальные показатели" FontSize="14" TextColor="Gray" />
+        <VerticalStackLayout Style="{StaticResource PageContent}">
+            <VerticalStackLayout Spacing="4">
+                <Label Text="Новые замеры" Style="{StaticResource PageTitle}" />
+                <Label Text="Заполни только те показатели, которые измерял сегодня." Style="{StaticResource PageSubtitle}" />
             </VerticalStackLayout>
-
-            <Frame BackgroundColor="#F8FFF8" CornerRadius="20" Padding="25" HasShadow="False" BorderColor="#E0E0E0">
-                <VerticalStackLayout Spacing="15">
-                    <VerticalStackLayout Spacing="5">
-                        <Label Text="Дата" FontSize="14" TextColor="Gray" />
-                        <DatePicker Date="{Binding MeasurementDate}" Format="dd MMMM yyyy" TextColor="#2E8B57" />
-                    </VerticalStackLayout>
-
-                    <VerticalStackLayout Spacing="5">
-                        <Label Text="Вес тела (кг)" FontSize="14" TextColor="Gray" />
-                        <Entry Text="{Binding Weight}" Keyboard="Numeric" TextColor="#2E8B57" />
-                    </VerticalStackLayout>
-
-                    <VerticalStackLayout Spacing="5">
-                        <Label Text="Грудь (см)" FontSize="14" TextColor="Gray" />
-                        <Entry Text="{Binding Chest}" Keyboard="Numeric" TextColor="#2E8B57" />
-                    </VerticalStackLayout>
-
-                    <VerticalStackLayout Spacing="5">
-                        <Label Text="Талия (см)" FontSize="14" TextColor="Gray" />
-                        <Entry Text="{Binding Waist}" Keyboard="Numeric" TextColor="#2E8B57" />
-                    </VerticalStackLayout>
-
-                    <VerticalStackLayout Spacing="5">
-                        <Label Text="Бедра (см)" FontSize="14" TextColor="Gray" />
-                        <Entry Text="{Binding Hips}" Keyboard="Numeric" TextColor="#2E8B57" />
-                    </VerticalStackLayout>
-
-                    <VerticalStackLayout Spacing="5">
-                        <Label Text="Бицепс (см)" FontSize="14" TextColor="Gray" />
-                        <Entry Text="{Binding Biceps}" Keyboard="Numeric" TextColor="#2E8B57" />
-                    </VerticalStackLayout>
-
-                    <VerticalStackLayout Spacing="5">
-                        <Label Text="Бедро (см)" FontSize="14" TextColor="Gray" />
-                        <Entry Text="{Binding Thigh}" Keyboard="Numeric" TextColor="#2E8B57" />
-                    </VerticalStackLayout>
-
-                    <VerticalStackLayout Spacing="5">
-                        <Label Text="Икра (см)" FontSize="14" TextColor="Gray" />
-                        <Entry Text="{Binding Calf}" Keyboard="Numeric" TextColor="#2E8B57" />
-                    </VerticalStackLayout>
-
-                    <VerticalStackLayout Spacing="5">
-                        <Label Text="Шея (см)" FontSize="14" TextColor="Gray" />
-                        <Entry Text="{Binding Neck}" Keyboard="Numeric" TextColor="#2E8B57" />
-                    </VerticalStackLayout>
+            <Border Style="{StaticResource Card}">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Дата" Style="{StaticResource FieldLabel}" />
+                    <DatePicker Date="{Binding MeasurementDate}" Format="dd MMMM yyyy" Style="{StaticResource DateInput}" />
+                    <Label Text="Вес тела, кг *" Style="{StaticResource FieldLabel}" />
+                    <Entry Text="{Binding Weight}" Keyboard="Numeric" Placeholder="80.5" Style="{StaticResource Input}" />
+                    <Label Text="Грудь, см" Style="{StaticResource FieldLabel}" /><Entry Text="{Binding Chest}" Keyboard="Numeric" Style="{StaticResource Input}" />
+                    <Label Text="Талия, см" Style="{StaticResource FieldLabel}" /><Entry Text="{Binding Waist}" Keyboard="Numeric" Style="{StaticResource Input}" />
+                    <Label Text="Бедра, см" Style="{StaticResource FieldLabel}" /><Entry Text="{Binding Hips}" Keyboard="Numeric" Style="{StaticResource Input}" />
+                    <Label Text="Бицепс, см" Style="{StaticResource FieldLabel}" /><Entry Text="{Binding Biceps}" Keyboard="Numeric" Style="{StaticResource Input}" />
+                    <Label Text="Бедро, см" Style="{StaticResource FieldLabel}" /><Entry Text="{Binding Thigh}" Keyboard="Numeric" Style="{StaticResource Input}" />
+                    <Label Text="Икра, см" Style="{StaticResource FieldLabel}" /><Entry Text="{Binding Calf}" Keyboard="Numeric" Style="{StaticResource Input}" />
+                    <Label Text="Шея, см" Style="{StaticResource FieldLabel}" /><Entry Text="{Binding Neck}" Keyboard="Numeric" Style="{StaticResource Input}" />
                 </VerticalStackLayout>
-            </Frame>
-
-            <Label Text="{Binding StatusMessage}" FontSize="14" TextColor="#2E8B57" HorizontalOptions="Center" IsVisible="{Binding IsStatusVisible}" />
-
-            <Button Text="Сохранить замеры" BackgroundColor="#2E8B57" TextColor="White" FontSize="16" FontAttributes="Bold" CornerRadius="25" HeightRequest="55" Command="{Binding SaveMeasurementCommand}" />
-            <Button Text="Назад" BackgroundColor="Transparent" TextColor="Gray" FontSize="14" CornerRadius="25" HeightRequest="45" BorderColor="#E0E0E0" BorderWidth="1" Command="{Binding CancelCommand}" />
+            </Border>
+            <Label Text="{Binding StatusMessage}" Style="{StaticResource ErrorText}" IsVisible="{Binding IsStatusVisible}" />
+            <Button Text="Сохранить замеры" Command="{Binding SaveMeasurementCommand}" Style="{StaticResource PrimaryButton}" />
+            <Button Text="Отмена" Command="{Binding CancelCommand}" Style="{StaticResource SecondaryButton}" />
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
