@@ -1,21 +1,19 @@
-﻿using GymStats.ViewModels;
+using GymStats.ViewModels;
 
 namespace GymStats;
 
 public partial class MainPage : ContentPage
 {
-    public MainPage(MainPageViewModel viewModel)
+    public MainPage(MainPageViewModel vm)
     {
         InitializeComponent();
-        BindingContext = viewModel;
+        BindingContext = vm;
     }
 
     protected override async void OnAppearing()
     {
         base.OnAppearing();
         if (BindingContext is MainPageViewModel vm)
-        {
-            await vm.LoadWorkoutsAsync();
-        }
+            await vm.LoadAsync();
     }
 }
