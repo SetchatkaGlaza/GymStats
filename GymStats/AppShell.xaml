@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<Shell
-    x:Class="GymStats.AppShell"
-    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:GymStats"
-    Shell.FlyoutBehavior="Disabled"
-    Shell.NavBarIsVisible="False">
-
-    <ShellContent
-        Title="Главная"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
-
+<Shell x:Class="GymStats.AppShell"
+       xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:local="clr-namespace:GymStats"
+       Shell.FlyoutBehavior="Disabled"
+       Shell.NavBarIsVisible="False"
+       Shell.TabBarBackgroundColor="{StaticResource Surface}"
+       Shell.TabBarForegroundColor="{StaticResource Primary}"
+       Shell.TabBarUnselectedColor="{StaticResource TextMuted}">
+    <TabBar>
+        <ShellContent Title="Главная" Route="MainPage" ContentTemplate="{DataTemplate local:MainPage}" />
+        <ShellContent Title="Аналитика" Route="AnalyticsPage" ContentTemplate="{DataTemplate local:AnalyticsPage}" />
+        <ShellContent Title="Замеры" Route="AnthropometryPage" ContentTemplate="{DataTemplate local:AnthropometryPage}" />
+        <ShellContent Title="Прогресс" Route="MediaPage" ContentTemplate="{DataTemplate local:MediaPage}" />
+        <ShellContent Title="Шаблоны" Route="TemplateListPage" ContentTemplate="{DataTemplate local:TemplateListPage}" />
+    </TabBar>
 </Shell>
