@@ -1,3 +1,4 @@
 <Solution>
   <Project Path="GymStats/GymStats.csproj" />
+  <Project Path="GymStats.Tests/GymStats.Tests.csproj" />
 </Solution>
