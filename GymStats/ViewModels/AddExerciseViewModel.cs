@@ -2,13 +2,13 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using GymStats.Data;
 using GymStats.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace GymStats.ViewModels;
 
 public partial class AddExerciseViewModel : ObservableObject
 {
     private readonly AppDbContext _db;
-
     [ObservableProperty] private string _name = string.Empty;
     [ObservableProperty] private string _muscleGroup = "Грудь";
     [ObservableProperty] private string _equipment = "Штанга";
@@ -30,8 +30,8 @@ public partial class AddExerciseViewModel : ObservableObject
             return;
         }
 
-        var duplicate = await _db.Exercises.AnyAsync(x => x.Name.ToLower() == Name.Trim().ToLower());
-        if (duplicate)
+        var normalized = Name.Trim().ToLower();
+        if (await _db.Exercises.AnyAsync(x => x.Name.ToLower() == normalized))
         {
             StatusMessage = "Такое упражнение уже есть в базе.";
             IsStatusVisible = true;
@@ -53,6 +53,5 @@ public partial class AddExerciseViewModel : ObservableObject
         await Shell.Current.GoToAsync("..");
     }
 
-    [RelayCommand]
-    private Task CancelAsync() => Shell.Current.GoToAsync("..");
+    [RelayCommand] private Task CancelAsync() => Shell.Current.GoToAsync("..");
 }
