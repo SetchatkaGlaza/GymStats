@@ -23,7 +23,11 @@ public partial class MediaViewModel : ObservableObject
 
     [RelayCommand] private async Task AddPhotoAsync() { var entry = await _media.PickAndStoreAsync(false); if (entry is not null) Entries.Insert(0, entry); }
     [RelayCommand] private async Task AddVideoAsync() { var entry = await _media.PickAndStoreAsync(true); if (entry is not null) Entries.Insert(0, entry); }
-    [RelayCommand] private Task OpenAsync(MediaEntry entry) => Launcher.Default.OpenAsync(entry.FilePath);
+    [RelayCommand]
+    private Task OpenAsync(MediaEntry entry) =>
+        Launcher.Default.OpenAsync(new OpenFileRequest(
+            entry.Description,
+            new ReadOnlyFile(entry.FilePath)));
 
     [RelayCommand]
     private async Task DeleteAsync(MediaEntry entry)
