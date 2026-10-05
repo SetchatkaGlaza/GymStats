@@ -15,6 +15,7 @@ public partial class FinishWorkoutViewModel : ObservableObject
     [ObservableProperty] private string _statusMessage = string.Empty;
     [ObservableProperty] private bool _isStatusVisible;
     [ObservableProperty] private bool _hasExercises;
+    [ObservableProperty] private bool _hasSets;
 
     public FinishWorkoutViewModel(AppDbContext db) => _db = db;
 
@@ -29,6 +30,11 @@ public partial class FinishWorkoutViewModel : ObservableObject
         WorkoutName = workout.Name;
         Notes = workout.Notes;
         HasExercises = await _db.WorkoutExercises.AnyAsync(x => x.WorkoutId == WorkoutId);
+        HasSets = await (
+            from s in _db.Sets
+            join we in _db.WorkoutExercises on s.WorkoutExerciseId equals we.Id
+            where we.WorkoutId == WorkoutId
+            select s.Id).AnyAsync();
     }
 
     [RelayCommand]
@@ -37,6 +43,13 @@ public partial class FinishWorkoutViewModel : ObservableObject
         if (!HasExercises)
         {
             StatusMessage = "Добавь хотя бы одно упражнение перед завершением.";
+            IsStatusVisible = true;
+            return;
+        }
+
+        if (!HasSets)
+        {
+            StatusMessage = "Добавь хотя бы один подход перед завершением.";
             IsStatusVisible = true;
             return;
         }
