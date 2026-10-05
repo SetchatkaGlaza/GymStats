@@ -34,21 +34,21 @@ public partial class AddSetViewModel : ObservableObject
             from s in _db.Sets
             join we in _db.WorkoutExercises on s.WorkoutExerciseId equals we.Id
             join w in _db.Workouts on we.WorkoutId equals w.Id
-            where we.ExerciseId == current.ExerciseId
+            where we.ExerciseId == current.ExerciseId && we.WorkoutId != current.WorkoutId
             orderby w.Date descending, s.Order descending
             select new { w.Date, s.Weight, s.Reps, s.RPE }
         ).FirstOrDefaultAsync();
 
-        if (previous is not null)
-        {
-            PreviousPerformance = $"Последний раз: {previous.Weight:0.#} кг × {previous.Reps} • RPE {previous.RPE} ({previous.Date:dd.MM.yyyy})";
-            HasPreviousPerformance = true;
-            if (string.IsNullOrWhiteSpace(Weight) || Weight == "0") Weight = previous.Weight.ToString("0.##", CultureInfo.CurrentCulture);
-        }
-        else
+        if (previous is null)
         {
             HasPreviousPerformance = false;
+            return;
         }
+
+        PreviousPerformance = $"Последний раз: {previous.Weight:0.#} кг × {previous.Reps} • RPE {previous.RPE} ({previous.Date:dd.MM.yyyy})";
+        HasPreviousPerformance = true;
+        if (string.IsNullOrWhiteSpace(Weight) || Weight == "0")
+            Weight = previous.Weight.ToString("0.##", CultureInfo.CurrentCulture);
     }
 
     [RelayCommand]
