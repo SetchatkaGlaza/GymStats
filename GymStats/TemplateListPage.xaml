@@ -2,93 +2,31 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="GymStats.TemplateListPage"
-             BackgroundColor="White">
-
-    <Grid RowDefinitions="Auto, *, Auto">
-
-        <!-- Заголовок -->
-        <VerticalStackLayout Grid.Row="0" Padding="30,40,30,20" Spacing="5">
-            <Label Text="Шаблоны тренировок"
-                   FontSize="28"
-                   FontAttributes="Bold"
-                   TextColor="#2E8B57" />
-            <Label Text="Создавай заготовки для быстрых тренировок"
-                   FontSize="14"
-                   TextColor="Gray" />
+             Title="Шаблоны">
+    <Grid RowDefinitions="Auto,*,Auto">
+        <VerticalStackLayout Grid.Row="0" Padding="22,28,22,16" Spacing="4">
+            <Label Text="Шаблоны" Style="{StaticResource PageTitle}" />
+            <Label Text="Один раз настрой — потом запускай в пару касаний." Style="{StaticResource PageSubtitle}" />
         </VerticalStackLayout>
-
-        <!-- Список шаблонов -->
-        <Grid Grid.Row="1">
-            <VerticalStackLayout IsVisible="{Binding IsListEmpty}"
-                                 VerticalOptions="Center"
-                                 HorizontalOptions="Center"
-                                 Spacing="10">
-                <Label Text="📋"
-                       FontSize="60"
-                       HorizontalOptions="Center" />
-                <Label Text="{Binding EmptyMessage}"
-                       FontSize="16"
-                       TextColor="Gray"
-                       HorizontalOptions="Center"
-                       HorizontalTextAlignment="Center" />
-            </VerticalStackLayout>
-
-            <CollectionView ItemsSource="{Binding Templates}"
-                            SelectionMode="None"
-                            Margin="20,0">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Frame BackgroundColor="#F8FFF8"
-                               CornerRadius="15"
-                               Padding="20"
-                               Margin="0,0,0,15"
-                               HasShadow="False"
-                               BorderColor="#E0E0E0">
-                            <Frame.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.OpenTemplateCommand}"
-                                                      CommandParameter="{Binding .}" />
-                            </Frame.GestureRecognizers>
-                            <Grid ColumnDefinitions="*, Auto" RowDefinitions="Auto, Auto">
-                                <Label Grid.Row="0" Grid.Column="0"
-                                       Text="{Binding Name}"
-                                       FontSize="18"
-                                       FontAttributes="Bold"
-                                       TextColor="#2E8B57" />
-                                <Label Grid.Row="1" Grid.Column="0"
-                                       Text="{Binding TemplateExercises.Count, StringFormat='Упражнений: {0}'}"
-                                       FontSize="14"
-                                       TextColor="DimGray" />
-                                <Label Grid.Row="0" Grid.Column="1" Grid.RowSpan="2"
-                                       Text="→"
-                                       FontSize="24"
-                                       TextColor="#2E8B57"
-                                       VerticalOptions="Center" />
-                            </Grid>
-                        </Frame>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </Grid>
-
-        <!-- Кнопки -->
-        <VerticalStackLayout Grid.Row="2" Spacing="10" Padding="30,20,30,30">
-            <Button Text="+ Новый шаблон"
-                    BackgroundColor="#2E8B57"
-                    TextColor="White"
-                    FontSize="16"
-                    FontAttributes="Bold"
-                    CornerRadius="25"
-                    HeightRequest="55"
-                    Command="{Binding GoToAddTemplateCommand}" />
-            <Button Text="Назад"
-                    BackgroundColor="Transparent"
-                    TextColor="Gray"
-                    FontSize="14"
-                    CornerRadius="25"
-                    HeightRequest="45"
-                    BorderColor="#E0E0E0"
-                    BorderWidth="1"
-                    Command="{Binding GoBackCommand}" />
-        </VerticalStackLayout>
+        <CollectionView Grid.Row="1" ItemsSource="{Binding Templates}" Margin="22,0" SelectionMode="None">
+            <CollectionView.EmptyView>
+                <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="8"><Label Text="☰" Style="{StaticResource EmptyIcon}" /><Label Text="Создай первый шаблон тренировки." Style="{StaticResource EmptyText}" /></VerticalStackLayout>
+            </CollectionView.EmptyView>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border Style="{StaticResource Card}" Margin="0,0,0,10">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <VerticalStackLayout>
+                                <Label Text="{Binding Name}" Style="{StaticResource CardTitle}" />
+                                <Label Text="{Binding TemplateExercises.Count, StringFormat='Упражнений: {0}'}" Style="{StaticResource CardMeta}" />
+                            </VerticalStackLayout>
+                            <Label Grid.Column="1" Text="›" FontSize="28" TextColor="{StaticResource Primary}" VerticalOptions="Center" />
+                            <Grid.GestureRecognizers><TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.OpenTemplateCommand}" CommandParameter="{Binding .}" /></Grid.GestureRecognizers>
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        <Button Grid.Row="2" Text="+ Новый шаблон" Command="{Binding GoToAddTemplateCommand}" Style="{StaticResource PrimaryButton}" Margin="22,10,22,22" />
     </Grid>
 </ContentPage>
