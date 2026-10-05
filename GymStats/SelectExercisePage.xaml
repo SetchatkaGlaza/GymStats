@@ -2,37 +2,43 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="GymStats.SelectExercisePage"
-             BackgroundColor="White">
-
-    <Grid RowDefinitions="Auto, Auto, *, Auto">
-        <VerticalStackLayout Grid.Row="0" Padding="30,40,30,20" Spacing="5">
-            <Label Text="Выбери упражнение" FontSize="28" FontAttributes="Bold" TextColor="#2E8B57" />
-            <Label Text="Используй фильтр для быстрого поиска" FontSize="14" TextColor="Gray" />
+             Title="Упражнения">
+    <Grid RowDefinitions="Auto,Auto,*,Auto">
+        <VerticalStackLayout Grid.Row="0" Padding="22,28,22,12" Spacing="4">
+            <Label Text="Упражнения" Style="{StaticResource PageTitle}" />
+            <Label Text="Найди нужное или создай своё." Style="{StaticResource PageSubtitle}" />
         </VerticalStackLayout>
-
-        <Frame Grid.Row="1" BackgroundColor="#F8FFF8" CornerRadius="15" Padding="15" Margin="30,0,30,20" HasShadow="False" BorderColor="#E0E0E0">
-            <Picker Title="Выбери группу мышц" ItemsSource="{Binding MuscleGroups}" SelectedItem="{Binding SelectedMuscleGroup}" TextColor="#2E8B57" />
-        </Frame>
-
-        <CollectionView Grid.Row="2" ItemsSource="{Binding Exercises}" SelectionMode="None" Margin="20,0">
+        <VerticalStackLayout Grid.Row="1" Padding="22,0" Spacing="8">
+            <SearchBar Text="{Binding SearchText}" Placeholder="Поиск упражнения..." BackgroundColor="{StaticResource Surface}" />
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
+                <Picker ItemsSource="{Binding MuscleGroups}" SelectedItem="{Binding SelectedMuscleGroup}" Style="{StaticResource PickerInput}" />
+                <Picker Grid.Column="1" ItemsSource="{Binding EquipmentOptions}" SelectedItem="{Binding SelectedEquipment}" Style="{StaticResource PickerInput}" />
+            </Grid>
+            <Picker ItemsSource="{Binding MovementOptions}" SelectedItem="{Binding SelectedMovement}" Style="{StaticResource PickerInput}" />
+        </VerticalStackLayout>
+        <CollectionView Grid.Row="2" ItemsSource="{Binding Exercises}" SelectionMode="None" Margin="22,10">
+            <CollectionView.EmptyView>
+                <VerticalStackLayout Padding="10,40" Spacing="8"><Label Text="Ничего не найдено" Style="{StaticResource EmptyText}" /></VerticalStackLayout>
+            </CollectionView.EmptyView>
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Frame BackgroundColor="#F8FFF8" CornerRadius="15" Padding="20" Margin="0,0,0,15" HasShadow="False" BorderColor="#E0E0E0">
-                        <Frame.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.SelectExerciseCommand}" CommandParameter="{Binding .}" />
-                        </Frame.GestureRecognizers>
-                        <Grid ColumnDefinitions="*, Auto">
-                            <VerticalStackLayout Grid.Column="0" Spacing="5">
-                                <Label Text="{Binding Name}" FontSize="18" FontAttributes="Bold" TextColor="#2E8B57" />
-                                <Label Text="{Binding Equipment}" FontSize="14" TextColor="Gray" />
+                    <Border Style="{StaticResource Card}" Margin="0,0,0,10">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <VerticalStackLayout>
+                                <Label Text="{Binding Name}" Style="{StaticResource CardTitle}" />
+                                <Label Text="{Binding MuscleGroup, StringFormat='{0}  •  '}" Style="{StaticResource CardMeta}" />
+                                <Label Text="{Binding Equipment}" Style="{StaticResource CardMeta}" />
                             </VerticalStackLayout>
-                            <Label Grid.Column="1" Text="+" FontSize="28" TextColor="#2E8B57" VerticalOptions="Center" />
+                            <Label Grid.Column="1" Text="+" FontSize="28" TextColor="{StaticResource Primary}" VerticalOptions="Center" />
+                            <Grid.GestureRecognizers><TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.SelectExerciseCommand}" CommandParameter="{Binding .}" /></Grid.GestureRecognizers>
                         </Grid>
-                    </Frame>
+                    </Border>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
-
-        <Button Grid.Row="3" Text="Отмена" BackgroundColor="Transparent" TextColor="Gray" FontSize="14" CornerRadius="25" HeightRequest="45" BorderColor="#E0E0E0" BorderWidth="1" Margin="30,20,30,30" Command="{Binding GoBackCommand}" />
+        <Grid Grid.Row="3" ColumnDefinitions="*,*" ColumnSpacing="10" Padding="22,10,22,22">
+            <Button Text="+ Своё упражнение" Command="{Binding GoToAddExerciseCommand}" Style="{StaticResource SecondaryButton}" />
+            <Button Grid.Column="1" Text="Назад" Command="{Binding GoBackCommand}" Style="{StaticResource SecondaryButton}" />
+        </Grid>
     </Grid>
 </ContentPage>
