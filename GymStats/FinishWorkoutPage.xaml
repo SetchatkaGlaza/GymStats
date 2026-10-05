@@ -2,33 +2,24 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="GymStats.FinishWorkoutPage"
-             BackgroundColor="White"
              Title="Завершение">
-
     <ScrollView>
-        <VerticalStackLayout Padding="30,40" Spacing="25">
-            <VerticalStackLayout Spacing="5">
-                <Label Text="Отличная работа!" FontSize="28" FontAttributes="Bold" TextColor="#2E8B57" />
-                <Label Text="Добавь итоговые заметки о тренировке" FontSize="14" TextColor="Gray" />
+        <VerticalStackLayout Style="{StaticResource PageContent}">
+            <VerticalStackLayout Spacing="4">
+                <Label Text="Завершение" Style="{StaticResource PageTitle}" />
+                <Label Text="Сохрани название и мысли после тренировки." Style="{StaticResource PageSubtitle}" />
             </VerticalStackLayout>
-
-            <Frame BackgroundColor="#F8FFF8" CornerRadius="20" Padding="25" HasShadow="False" BorderColor="#E0E0E0">
-                <VerticalStackLayout Spacing="20">
-                    <VerticalStackLayout Spacing="5">
-                        <Label Text="Название тренировки" FontSize="14" TextColor="Gray" />
-                        <Entry Text="{Binding WorkoutName}" Placeholder="Например: День груди" TextColor="#2E8B57" BackgroundColor="Transparent" />
-                    </VerticalStackLayout>
-
-                    <VerticalStackLayout Spacing="5">
-                        <Label Text="Итоговые заметки и ощущения" FontSize="14" TextColor="Gray" />
-                        <Editor Text="{Binding Notes}" Placeholder="Как прошла тренировка? Что получилось, а что нет?" PlaceholderColor="LightGray" TextColor="Black" BackgroundColor="White" HeightRequest="150" FontSize="16" />
-                    </VerticalStackLayout>
+            <Border Style="{StaticResource Card}">
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="Название" Style="{StaticResource FieldLabel}" />
+                    <Entry Text="{Binding WorkoutName}" Style="{StaticResource Input}" />
+                    <Label Text="Заметки" Style="{StaticResource FieldLabel}" />
+                    <Editor Text="{Binding Notes}" Placeholder="Самочувствие, техника, выводы..." Style="{StaticResource EditorInput}" />
                 </VerticalStackLayout>
-            </Frame>
-
-            <Label Text="{Binding StatusMessage}" FontSize="14" TextColor="#2E8B57" HorizontalOptions="Center" HorizontalTextAlignment="Center" IsVisible="{Binding IsStatusVisible}" />
-
-            <Button Text="Завершить и сохранить" BackgroundColor="#2E8B57" TextColor="White" FontSize="16" FontAttributes="Bold" CornerRadius="25" HeightRequest="55" Command="{Binding SaveAndFinishCommand}" />
+            </Border>
+            <Label Text="{Binding StatusMessage}" Style="{StaticResource ErrorText}" IsVisible="{Binding IsStatusVisible}" />
+            <Button Text="Сохранить тренировку" Command="{Binding SaveAndFinishCommand}" Style="{StaticResource PrimaryButton}" />
+            <Button Text="Назад" Command="{Binding GoBackCommand}" Style="{StaticResource SecondaryButton}" />
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
