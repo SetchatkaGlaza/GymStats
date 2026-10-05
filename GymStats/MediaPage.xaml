@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="GymStats.MediaPage"
+             Title="Прогресс">
+    <Grid RowDefinitions="Auto,*,Auto">
+        <VerticalStackLayout Padding="22,28,22,16" Spacing="4">
+            <Label Text="Прогресс" Style="{StaticResource PageTitle}" />
+            <Label Text="Фото и видео без облака — только на твоём устройстве." Style="{StaticResource PageSubtitle}" />
+        </VerticalStackLayout>
+
+        <CollectionView Grid.Row="1" ItemsSource="{Binding Entries}" Margin="22,0">
+            <CollectionView.EmptyView>
+                <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="8">
+                    <Label Text="Нет материалов" Style="{StaticResource EmptyIcon}" />
+                    <Label Text="Добавь первое фото или видео прогресса." Style="{StaticResource EmptyText}" />
+                </VerticalStackLayout>
+            </CollectionView.EmptyView>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border Style="{StaticResource Card}" Margin="0,0,0,12">
+                        <Grid ColumnDefinitions="100,*,Auto" ColumnSpacing="12">
+                            <Image Grid.Column="0" Source="{Binding FilePath}" Aspect="AspectFill" HeightRequest="100"
+                                   IsVisible="{Binding MediaType, Converter={StaticResource ImageMediaConverter}}" />
+                            <VerticalStackLayout Grid.Column="1" Spacing="3">
+                                <Label Text="{Binding MediaType}" Style="{StaticResource Badge}" />
+                                <Label Text="{Binding Date, StringFormat='{0:dd.MM.yyyy HH:mm}'}" Style="{StaticResource CardTitle}" />
+                                <Label Text="{Binding Description}" Style="{StaticResource CardMeta}" LineBreakMode="TailTruncation" />
+                            </VerticalStackLayout>
+                            <Button Grid.Column="2" Text="⋯" Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.OpenCommand}" CommandParameter="{Binding .}" Style="{StaticResource IconButton}" />
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <Grid Grid.Row="2" ColumnDefinitions="*,*" ColumnSpacing="10" Padding="22,14,22,22">
+            <Button Text="+ Фото" Command="{Binding AddPhotoCommand}" Style="{StaticResource PrimaryButton}" />
+            <Button Grid.Column="1" Text="+ Видео" Command="{Binding AddVideoCommand}" Style="{StaticResource SecondaryButton}" />
+        </Grid>
+    </Grid>
+</ContentPage>
