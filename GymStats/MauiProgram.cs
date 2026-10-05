@@ -11,20 +11,18 @@ public static class MauiProgram
     public static MauiApp CreateMauiApp()
     {
         var builder = MauiApp.CreateBuilder();
-
-        builder.UseMauiApp<App>()
-            .ConfigureFonts(fonts =>
-            {
-                fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-                fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-            });
+        builder.UseMauiApp<App>().ConfigureFonts(fonts =>
+        {
+            fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+            fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+        });
 
         var dbPath = Path.Combine(FileSystem.AppDataDirectory, "gymstats.db3");
         builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite($"Filename={dbPath}"));
 
-        builder.Services.AddSingleton<AnalyticsService>();
-        builder.Services.AddSingleton<BackupService>();
-        builder.Services.AddSingleton<MediaService>();
+        builder.Services.AddTransient<AnalyticsService>();
+        builder.Services.AddTransient<BackupService>();
+        builder.Services.AddTransient<MediaService>();
 
         builder.Services.AddTransient<MainPage>();
         builder.Services.AddTransient<AddWorkoutPage>();
@@ -65,7 +63,6 @@ public static class MauiProgram
 #if DEBUG
         builder.Logging.AddDebug();
 #endif
-
         return builder.Build();
     }
 }
