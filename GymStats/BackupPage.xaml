@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="GymStats.BackupPage"
+             Title="Данные">
+    <VerticalStackLayout Style="{StaticResource PageContent}" Spacing="18">
+        <VerticalStackLayout Spacing="4">
+            <Label Text="Данные" Style="{StaticResource PageTitle}" />
+            <Label Text="Твои данные остаются локальными." Style="{StaticResource PageSubtitle}" />
+        </VerticalStackLayout>
+        <Border Style="{StaticResource Card}">
+            <VerticalStackLayout Spacing="10">
+                <Label Text="Резервная копия" Style="{StaticResource SectionTitle}" />
+                <Label Text="{Binding Status}" Style="{StaticResource CardMeta}" />
+                <Button Text="Экспортировать JSON" Command="{Binding ExportCommand}" Style="{StaticResource PrimaryButton}" />
+            </VerticalStackLayout>
+        </Border>
+        <Label Text="Файл содержит упражнения, шаблоны, тренировки, подходы, замеры и записи медиа. Сами фото и видео в JSON не встраиваются — сохраняются их локальные пути." Style="{StaticResource CardMeta}" />
+    </VerticalStackLayout>
+</ContentPage>
