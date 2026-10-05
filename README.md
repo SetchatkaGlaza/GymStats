@@ -44,7 +44,7 @@ Offline-first трекер силовых тренировок и антропо
 
 Запуск: dotnet test GymStats.Tests/GymStats.Tests.csproj
 
-CI дополнительно проверяет unit-тесты и Release-сборку Android.
+CI дополнительно проверяет unit-тесты и Release-сборки Android, Windows и iOS без подписи.
 
 ## Данные
 
