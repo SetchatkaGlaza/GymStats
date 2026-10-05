@@ -1,6 +1,8 @@
+using System.IO.Compression;
 using System.Text;
 using System.Text.Json;
 using GymStats.Data;
+using GymStats.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace GymStats.Services;
@@ -8,10 +10,9 @@ namespace GymStats.Services;
 public sealed class BackupService
 {
     private readonly AppDbContext _db;
-
     public BackupService(AppDbContext db) => _db = db;
 
-    public async Task<string> CreateBackupAsync()
+    public async Task<string> SaveBackupAsync()
     {
         var payload = new BackupPayload
         {
@@ -26,15 +27,25 @@ public sealed class BackupService
             Media = await _db.MediaEntries.AsNoTracking().ToListAsync()
         };
 
-        return JsonSerializer.Serialize(payload, new JsonSerializerOptions { WriteIndented = true });
-    }
+        var json = JsonSerializer.Serialize(payload, new JsonSerializerOptions { WriteIndented = true });
+        var path = Path.Combine(FileSystem.CacheDirectory, $"GymStats-backup-{DateTime.Now:yyyyMMdd-HHmmss}.zip");
+        if (File.Exists(path)) File.Delete(path);
 
-    public async Task<string> SaveBackupAsync()
-    {
-        var json = await CreateBackupAsync();
-        var fileName = $"GymStats-backup-{DateTime.Now:yyyyMMdd-HHmmss}.json";
-        var path = Path.Combine(FileSystem.CacheDirectory, fileName);
-        await File.WriteAllTextAsync(path, json, Encoding.UTF8);
+        using var archive = ZipFile.Open(path, ZipArchiveMode.Create);
+        var dataEntry = archive.CreateEntry("gymstats.json", CompressionLevel.Optimal);
+        await using (var stream = dataEntry.Open())
+        await using (var writer = new StreamWriter(stream, new UTF8Encoding(false)))
+            await writer.WriteAsync(json);
+
+        foreach (var media in payload.Media)
+        {
+            if (!File.Exists(media.FilePath)) continue;
+            var entry = archive.CreateEntry($"media/{media.Id}{Path.GetExtension(media.FilePath)}", CompressionLevel.Fastest);
+            await using var source = File.OpenRead(media.FilePath);
+            await using var destination = entry.Open();
+            await source.CopyToAsync(destination);
+        }
+
         return path;
     }
 
@@ -48,6 +59,6 @@ public sealed class BackupService
         public object WorkoutExercises { get; init; } = null!;
         public object Sets { get; init; } = null!;
         public object Measurements { get; init; } = null!;
-        public object Media { get; init; } = null!;
+        public List<MediaEntry> Media { get; init; } = new();
     }
 }
