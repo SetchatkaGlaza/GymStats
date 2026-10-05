@@ -20,8 +20,11 @@ public partial class AnalyticsViewModel : ObservableObject
     [ObservableProperty] private Exercise? _selectedExercise;
     [ObservableProperty] private ObservableCollection<ExerciseProgressPoint> _exerciseProgress = new();
     [ObservableProperty] private ObservableCollection<BodyProgressPoint> _bodyProgress = new();
+    [ObservableProperty] private string _selectedBodyMetric = "Вес";
     [ObservableProperty] private bool _hasExerciseData;
     [ObservableProperty] private bool _hasBodyData;
+
+    public ObservableCollection<string> BodyMetrics { get; } = new(new[] { "Вес", "Грудь", "Талия", "Бедра", "Бицепс", "Бедро", "Икра", "Шея" });
 
     public AnalyticsViewModel(AppDbContext db, AnalyticsService analytics)
     {
@@ -37,9 +40,7 @@ public partial class AnalyticsViewModel : ObservableObject
         AverageRpe = await _analytics.GetAverageRpeAsync();
         WorkoutsThisMonth = await _analytics.GetWorkoutCountSinceAsync(new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1));
 
-        var list = await _db.Exercises.OrderBy(x => x.MuscleGroup).ThenBy(x => x.Name).ToListAsync();
-        Exercises = new ObservableCollection<Exercise>(list);
-
+        Exercises = new ObservableCollection<Exercise>(await _db.Exercises.AsNoTracking().OrderBy(x => x.MuscleGroup).ThenBy(x => x.Name).ToListAsync());
         BodyProgress = new ObservableCollection<BodyProgressPoint>(await _analytics.GetBodyProgressAsync());
         HasBodyData = BodyProgress.Count > 1;
 
@@ -49,10 +50,14 @@ public partial class AnalyticsViewModel : ObservableObject
             await LoadExerciseAsync();
     }
 
-    partial void OnSelectedExerciseChanged(Exercise? value)
+    partial void OnSelectedExerciseChanged(Exercise? value) => _ = LoadExerciseAsync();
+    partial void OnSelectedBodyMetricChanged(string value) => OnPropertyChanged(nameof(BodyMetricValues));
+
+    public IReadOnlyList<double> BodyMetricValues => BodyProgress.Select(x => SelectedBodyMetric switch
     {
-        _ = LoadExerciseAsync();
-    }
+        "Грудь" => x.Chest, "Талия" => x.Waist, "Бедра" => x.Hips, "Бицепс" => x.Biceps,
+        "Бедро" => x.Thigh, "Икра" => x.Calf, "Шея" => x.Neck, _ => x.Weight
+    }).ToList();
 
     private async Task LoadExerciseAsync()
     {
@@ -62,9 +67,7 @@ public partial class AnalyticsViewModel : ObservableObject
             HasExerciseData = false;
             return;
         }
-
-        var points = await _analytics.GetExerciseProgressAsync(SelectedExercise.Id);
-        ExerciseProgress = new ObservableCollection<ExerciseProgressPoint>(points);
+        ExerciseProgress = new ObservableCollection<ExerciseProgressPoint>(await _analytics.GetExerciseProgressAsync(SelectedExercise.Id));
         HasExerciseData = ExerciseProgress.Count > 1;
     }
 }
