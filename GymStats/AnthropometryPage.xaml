@@ -2,43 +2,44 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="GymStats.AnthropometryPage"
-             BackgroundColor="White">
-
-    <Grid RowDefinitions="Auto, *, Auto">
-        <VerticalStackLayout Grid.Row="0" Padding="30,40,30,20" Spacing="5">
-            <Label Text="Замеры тела" FontSize="28" FontAttributes="Bold" TextColor="#2E8B57" />
-            <Label Text="Отслеживай изменения своих объемов" FontSize="14" TextColor="Gray" />
+             Title="Замеры">
+    <Grid RowDefinitions="Auto,*,Auto">
+        <VerticalStackLayout Grid.Row="0" Padding="22,28,22,16" Spacing="4">
+            <Label Text="Замеры тела" Style="{StaticResource PageTitle}" />
+            <Label Text="Следи за весом и объёмами в динамике." Style="{StaticResource PageSubtitle}" />
         </VerticalStackLayout>
-
-        <Grid Grid.Row="1">
-            <VerticalStackLayout IsVisible="{Binding IsListEmpty}" VerticalOptions="Center" HorizontalOptions="Center" Spacing="10">
-                <Label Text="" FontSize="60" HorizontalOptions="Center" />
-                <Label Text="Пока нет замеров" FontSize="16" TextColor="Gray" HorizontalOptions="Center" />
-            </VerticalStackLayout>
-
-            <CollectionView ItemsSource="{Binding Measurements}" SelectionMode="None" Margin="20,0">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Frame BackgroundColor="#F8FFF8" CornerRadius="15" Padding="20" Margin="0,0,0,15" HasShadow="False" BorderColor="#E0E0E0">
-                            <Grid ColumnDefinitions="*, Auto" RowDefinitions="Auto, Auto">
-                                <Label Grid.Row="0" Grid.Column="0" Text="{Binding Date, StringFormat='{0:dd MMMM yyyy}'}" FontSize="18" FontAttributes="Bold" TextColor="#2E8B57" />
-                                <Label Grid.Row="1" Grid.Column="0" Text="{Binding Weight, StringFormat='Вес: {0:F1} кг'}" FontSize="14" TextColor="DimGray" />
-
-                                <Button Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" 
-                                        Text="🗑" FontSize="16" 
-                                        BackgroundColor="Transparent" TextColor="Red"
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeleteMeasurementCommand}" 
-                                        CommandParameter="{Binding .}" />
+        <CollectionView Grid.Row="1" ItemsSource="{Binding Measurements}" Margin="22,0" SelectionMode="None">
+            <CollectionView.EmptyView>
+                <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center" Spacing="8">
+                    <Label Text="⌁" Style="{StaticResource EmptyIcon}" />
+                    <Label Text="Пока нет замеров." Style="{StaticResource EmptyText}" />
+                </VerticalStackLayout>
+            </CollectionView.EmptyView>
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Border Style="{StaticResource Card}" Margin="0,0,0,12">
+                        <VerticalStackLayout Spacing="10">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <VerticalStackLayout>
+                                    <Label Text="{Binding Date, StringFormat='{0:dd MMMM yyyy}'}" Style="{StaticResource CardTitle}" />
+                                    <Label Text="{Binding Weight, StringFormat='Вес  •  {0:0.#} кг'}" Style="{StaticResource CardMeta}" />
+                                </VerticalStackLayout>
+                                <Button Grid.Column="1" Text="×" Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeleteMeasurementCommand}" CommandParameter="{Binding .}" Style="{StaticResource IconButton}" />
                             </Grid>
-                        </Frame>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </Grid>
-
-        <VerticalStackLayout Grid.Row="2" Spacing="10" Padding="30,20,30,30">
-            <Button Text="+ Новые замеры" BackgroundColor="#2E8B57" TextColor="White" FontSize="16" FontAttributes="Bold" CornerRadius="25" HeightRequest="55" Command="{Binding GoToAddMeasurementCommand}" />
-            <Button Text="Назад" BackgroundColor="Transparent" TextColor="Gray" FontSize="14" CornerRadius="25" HeightRequest="45" BorderColor="#E0E0E0" BorderWidth="1" Command="{Binding GoBackCommand}" />
-        </VerticalStackLayout>
+                            <FlexLayout Wrap="Wrap" Direction="Row" JustifyContent="Start">
+                                <Label Text="{Binding Chest, StringFormat='Грудь {0:0.#}  '}" Style="{StaticResource Badge}" Margin="0,0,12,4}" />
+                                <Label Text="{Binding Waist, StringFormat='Талия {0:0.#}  '}" Style="{StaticResource Badge}" Margin="0,0,12,4}" />
+                                <Label Text="{Binding Hips, StringFormat='Бедра {0:0.#}  '}" Style="{StaticResource Badge}" Margin="0,0,12,4}" />
+                                <Label Text="{Binding Biceps, StringFormat='Бицепс {0:0.#}  '}" Style="{StaticResource Badge}" Margin="0,0,12,4}" />
+                                <Label Text="{Binding Thigh, StringFormat='Бедро {0:0.#}  '}" Style="{StaticResource Badge}" Margin="0,0,12,4}" />
+                                <Label Text="{Binding Calf, StringFormat='Икра {0:0.#}  '}" Style="{StaticResource Badge}" Margin="0,0,12,4}" />
+                                <Label Text="{Binding Neck, StringFormat='Шея {0:0.#}'}" Style="{StaticResource Badge}" Margin="0,0,12,4}" />
+                            </FlexLayout>
+                        </VerticalStackLayout>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        <Button Grid.Row="2" Text="+ Добавить замер" Command="{Binding GoToAddMeasurementCommand}" Style="{StaticResource PrimaryButton}" Margin="22,10,22,22" />
     </Grid>
 </ContentPage>
