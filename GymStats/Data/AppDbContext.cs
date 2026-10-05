@@ -34,6 +34,7 @@ public class AppDbContext : DbContext
         await AddColumnIfMissingAsync("Exercises", "MovementType", "TEXT NOT NULL DEFAULT ''");
         await AddColumnIfMissingAsync("Exercises", "Angle", "TEXT NOT NULL DEFAULT ''");
         await AddColumnIfMissingAsync("Exercises", "Description", "TEXT NOT NULL DEFAULT ''");
+        await AddColumnIfMissingAsync("Exercises", "IsCustom", "INTEGER NOT NULL DEFAULT 0");
         await AddColumnIfMissingAsync("BodyMeasurements", "Neck", "REAL NOT NULL DEFAULT 0");
         await AddColumnIfMissingAsync("WorkoutExercises", "TargetSets", "INTEGER NOT NULL DEFAULT 0");
         await AddColumnIfMissingAsync("WorkoutExercises", "TargetReps", "INTEGER NOT NULL DEFAULT 0");
