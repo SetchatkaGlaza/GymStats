@@ -2,40 +2,30 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="GymStats.AddExercisePage"
+             x:Name="Root"
              Title="Новое упражнение">
     <ScrollView>
-        <VerticalStackLayout Style="{StaticResource PageContent}" Spacing="18">
+        <VerticalStackLayout Style="{StaticResource PageContent}">
             <VerticalStackLayout Spacing="4">
                 <Label Text="Новое упражнение" Style="{StaticResource PageTitle}" />
                 <Label Text="Добавь своё упражнение в локальную базу." Style="{StaticResource PageSubtitle}" />
             </VerticalStackLayout>
-
             <Border Style="{StaticResource Card}">
-                <VerticalStackLayout Spacing="14">
+                <VerticalStackLayout Spacing="12">
                     <Label Text="Название" Style="{StaticResource FieldLabel}" />
                     <Entry Text="{Binding Name}" Placeholder="Например, жим в хаммере" Style="{StaticResource Input}" />
-
                     <Label Text="Группа мышц" Style="{StaticResource FieldLabel}" />
-                    <Picker ItemsSource="{Binding Source={x:Reference Root}, Path=BindingContext.MuscleGroups}"
-                            SelectedItem="{Binding MuscleGroup}" Style="{StaticResource Input}" />
-
+                    <Picker ItemsSource="{Binding Source={x:Reference Root}, Path=MuscleGroups}" SelectedItem="{Binding MuscleGroup}" Style="{StaticResource PickerInput}" />
                     <Label Text="Оборудование" Style="{StaticResource FieldLabel}" />
-                    <Picker ItemsSource="{Binding Source={x:Reference Root}, Path=BindingContext.EquipmentOptions}"
-                            SelectedItem="{Binding Equipment}" Style="{StaticResource Input}" />
-
+                    <Picker ItemsSource="{Binding Source={x:Reference Root}, Path=EquipmentOptions}" SelectedItem="{Binding Equipment}" Style="{StaticResource PickerInput}" />
                     <Label Text="Тип движения" Style="{StaticResource FieldLabel}" />
-                    <Picker ItemsSource="{Binding Source={x:Reference Root}, Path=BindingContext.MovementOptions}"
-                            SelectedItem="{Binding MovementType}" Style="{StaticResource Input}" />
-
+                    <Picker ItemsSource="{Binding Source={x:Reference Root}, Path=MovementOptions}" SelectedItem="{Binding MovementType}" Style="{StaticResource PickerInput}" />
                     <Label Text="Угол / положение" Style="{StaticResource FieldLabel}" />
-                    <Picker ItemsSource="{Binding Source={x:Reference Root}, Path=BindingContext.AngleOptions}"
-                            SelectedItem="{Binding Angle}" Style="{StaticResource Input}" />
-
+                    <Picker ItemsSource="{Binding Source={x:Reference Root}, Path=AngleOptions}" SelectedItem="{Binding Angle}" Style="{StaticResource PickerInput}" />
                     <Label Text="Описание" Style="{StaticResource FieldLabel}" />
-                    <Editor Text="{Binding Description}" Placeholder="Техника, подсказки, особенности..." AutoSize="TextChanges" Style="{StaticResource Input}" />
+                    <Editor Text="{Binding Description}" Placeholder="Техника, подсказки, особенности..." AutoSize="TextChanges" Style="{StaticResource EditorInput}" />
                 </VerticalStackLayout>
             </Border>
-
             <Label Text="{Binding StatusMessage}" IsVisible="{Binding IsStatusVisible}" Style="{StaticResource ErrorText}" />
             <Button Text="Сохранить упражнение" Command="{Binding SaveCommand}" Style="{StaticResource PrimaryButton}" />
             <Button Text="Отмена" Command="{Binding CancelCommand}" Style="{StaticResource SecondaryButton}" />
