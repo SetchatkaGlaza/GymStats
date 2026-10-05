@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.Input;
 using GymStats.Data;
 using GymStats.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.ObjectModel;
 
 namespace GymStats.ViewModels;
 
@@ -17,6 +18,11 @@ public partial class AddExerciseViewModel : ObservableObject
     [ObservableProperty] private string _description = string.Empty;
     [ObservableProperty] private string _statusMessage = string.Empty;
     [ObservableProperty] private bool _isStatusVisible;
+
+    public ObservableCollection<string> MuscleGroups { get; } = new(new[] { "Грудь","Спина","Ноги","Плечи","Бицепс","Трицепс","Пресс","Икры","Другое" });
+    public ObservableCollection<string> EquipmentOptions { get; } = new(new[] { "Штанга","Гантели","Тренажер","Турник","Брусья","Скамья","Без оборудования","Другое" });
+    public ObservableCollection<string> MovementOptions { get; } = new(new[] { "Жим","Тяга","Сгибание","Разгибание","Сведение","Отведение","Приседание","Выпад","Изометрия","Другое" });
+    public ObservableCollection<string> AngleOptions { get; } = new(new[] { "Горизонтальный","Наклонный","Вертикальный","Односторонний","Другое" });
 
     public AddExerciseViewModel(AppDbContext db) => _db = db;
 
@@ -40,15 +46,9 @@ public partial class AddExerciseViewModel : ObservableObject
 
         _db.Exercises.Add(new Exercise
         {
-            Name = Name.Trim(),
-            MuscleGroup = MuscleGroup,
-            Equipment = Equipment,
-            MovementType = MovementType,
-            Angle = Angle,
-            Description = Description.Trim(),
-            IsCustom = true
+            Name = Name.Trim(), MuscleGroup = MuscleGroup, Equipment = Equipment,
+            MovementType = MovementType, Angle = Angle, Description = Description.Trim(), IsCustom = true
         });
-
         await _db.SaveChangesAsync();
         await Shell.Current.GoToAsync("..");
     }
