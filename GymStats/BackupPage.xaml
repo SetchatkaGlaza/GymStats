@@ -3,18 +3,18 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="GymStats.BackupPage"
              Title="Данные">
-    <VerticalStackLayout Style="{StaticResource PageContent}" Spacing="18">
+    <VerticalStackLayout Style="{StaticResource PageContent}">
         <VerticalStackLayout Spacing="4">
-            <Label Text="Данные" Style="{StaticResource PageTitle}" />
-            <Label Text="Твои данные остаются локальными." Style="{StaticResource PageSubtitle}" />
+            <Label Text="Резервная копия" Style="{StaticResource PageTitle}" />
+            <Label Text="Один ZIP хранит историю и медиафайлы." Style="{StaticResource PageSubtitle}" />
         </VerticalStackLayout>
         <Border Style="{StaticResource Card}">
-            <VerticalStackLayout Spacing="10">
-                <Label Text="Резервная копия" Style="{StaticResource SectionTitle}" />
+            <VerticalStackLayout Spacing="12">
+                <Label Text="Полный локальный экспорт" Style="{StaticResource SectionTitle}" />
                 <Label Text="{Binding Status}" Style="{StaticResource CardMeta}" />
-                <Button Text="Экспортировать JSON" Command="{Binding ExportCommand}" Style="{StaticResource PrimaryButton}" />
+                <Button Text="Создать и поделиться ZIP" Command="{Binding ExportCommand}" Style="{StaticResource PrimaryButton}" />
             </VerticalStackLayout>
         </Border>
-        <Label Text="Файл содержит упражнения, шаблоны, тренировки, подходы, замеры и записи медиа. Сами фото и видео в JSON не встраиваются — сохраняются их локальные пути." Style="{StaticResource CardMeta}" />
+        <Label Text="В архив попадают тренировки, подходы, шаблоны, упражнения, замеры, а также найденные фото и видео прогресса." Style="{StaticResource CardMeta}" />
     </VerticalStackLayout>
 </ContentPage>
