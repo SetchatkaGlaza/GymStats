@@ -1,3 +1,4 @@
+using Xunit;
 using GymStats.Services;
 
 namespace GymStats.Tests;
