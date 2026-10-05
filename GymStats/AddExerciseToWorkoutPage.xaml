@@ -2,44 +2,38 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="GymStats.AddExerciseToWorkoutPage"
-             BackgroundColor="White">
-
-    <Grid RowDefinitions="Auto, *, Auto">
-        <VerticalStackLayout Grid.Row="0" Padding="30,40,30,20" Spacing="5">
-            <Label Text="Упражнения" FontSize="28" FontAttributes="Bold" TextColor="#2E8B57" />
-            <Label Text="Добавь упражнения и подходы" FontSize="14" TextColor="Gray" />
+             Title="Тренировка">
+    <Grid RowDefinitions="Auto,*,Auto">
+        <VerticalStackLayout Grid.Row="0" Padding="22,28,22,16" Spacing="4">
+            <Label Text="{Binding WorkoutName}" Style="{StaticResource PageTitle}" />
+            <Label Text="Добавляй упражнения, подходы и заметки." Style="{StaticResource PageSubtitle}" />
         </VerticalStackLayout>
-
         <Grid Grid.Row="1">
-            <VerticalStackLayout IsVisible="{Binding IsListEmpty}" VerticalOptions="Center" HorizontalOptions="Center" Spacing="10">
-                <Label Text="💪" FontSize="60" HorizontalOptions="Center" />
-                <Label Text="{Binding EmptyMessage}" FontSize="16" TextColor="Gray" HorizontalOptions="Center" HorizontalTextAlignment="Center" />
+            <VerticalStackLayout IsVisible="{Binding IsListEmpty}" VerticalOptions="Center" HorizontalOptions="Center" Spacing="8">
+                <Label Text="＋" Style="{StaticResource EmptyIcon}" />
+                <Label Text="Добавь первое упражнение." Style="{StaticResource EmptyText}" />
             </VerticalStackLayout>
-
-            <CollectionView ItemsSource="{Binding WorkoutExercises}" SelectionMode="None" Margin="20,0">
+            <CollectionView ItemsSource="{Binding WorkoutExercises}" SelectionMode="None" Margin="22,0">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Frame BackgroundColor="#F8FFF8" CornerRadius="15" Padding="20" Margin="0,0,0,15" HasShadow="False" BorderColor="#E0E0E0">
-                            <Frame.GestureRecognizers>
-                                <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.OpenExerciseDetailCommand}" CommandParameter="{Binding .}" />
-                            </Frame.GestureRecognizers>
-                            <Grid ColumnDefinitions="*, Auto">
-                                <VerticalStackLayout Grid.Column="0" Spacing="5">
-                                    <Label Text="{Binding Exercise.Name}" FontSize="18" FontAttributes="Bold" TextColor="#2E8B57" />
-                                    <Label Text="{Binding Exercise.MuscleGroup}" FontSize="14" TextColor="Gray" />
+                        <Border Style="{StaticResource Card}" Margin="0,0,0,10">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <VerticalStackLayout>
+                                    <Label Text="{Binding Exercise.Name}" Style="{StaticResource CardTitle}" />
+                                    <Label Text="{Binding Exercise.MuscleGroup}" Style="{StaticResource CardMeta}" />
                                 </VerticalStackLayout>
-                                <Label Grid.Column="1" Text="→" FontSize="24" TextColor="#2E8B57" VerticalOptions="Center" />
+                                <Label Grid.Column="1" Text="›" FontSize="28" TextColor="{StaticResource Primary}" VerticalOptions="Center" />
+                                <Grid.GestureRecognizers><TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.OpenExerciseDetailCommand}" CommandParameter="{Binding .}" /></Grid.GestureRecognizers>
                             </Grid>
-                        </Frame>
+                        </Border>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
         </Grid>
-
-        <VerticalStackLayout Grid.Row="2" Spacing="10" Padding="30,20,30,30">
-            <Button Text="+ Добавить упражнение" BackgroundColor="#2E8B57" TextColor="White" FontSize="16" FontAttributes="Bold" CornerRadius="25" HeightRequest="55" Command="{Binding GoToAddExerciseCommand}" />
-            <Button Text="Завершить тренировку и добавить заметки" BackgroundColor="#2E8B57" TextColor="White" FontSize="16" FontAttributes="Bold" CornerRadius="25" HeightRequest="55" Command="{Binding GoToFinishWorkoutCommand}" />
-            <Button Text="Отмена (удалить тренировку)" BackgroundColor="Transparent" TextColor="Red" FontSize="14" CornerRadius="25" HeightRequest="45" BorderColor="#E0E0E0" BorderWidth="1" Command="{Binding GoBackCommand}" />
+        <VerticalStackLayout Grid.Row="2" Spacing="8" Padding="22,10,22,22">
+            <Button Text="+ Добавить упражнение" Command="{Binding GoToAddExerciseCommand}" Style="{StaticResource PrimaryButton}" />
+            <Button Text="Завершить тренировку" Command="{Binding GoToFinishWorkoutCommand}" Style="{StaticResource SecondaryButton}" />
+            <Button Text="Удалить незавершённую тренировку" Command="{Binding DeleteWorkoutCommand}" Style="{StaticResource IconButton}" />
         </VerticalStackLayout>
     </Grid>
 </ContentPage>
