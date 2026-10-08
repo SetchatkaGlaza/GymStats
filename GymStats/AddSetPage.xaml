@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="GymStats.AddSetPage"
              Title="Новый подход">
-    <ScrollView Keyboard="Default">
+    <ScrollView>
         <VerticalStackLayout Style="{StaticResource PageContent}" Spacing="14">
             <VerticalStackLayout Spacing="3">
                 <Label Text="Новый подход" Style="{StaticResource PageTitle}" />
