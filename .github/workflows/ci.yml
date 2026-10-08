@@ -4,6 +4,7 @@ concurrency:
   group: gymstats-ci-${{ github.ref }}
   cancel-in-progress: true
 
+# CI trigger verification after repository Actions were re-enabled.
 on:
   push:
     branches: ["master", "feature/**"]
