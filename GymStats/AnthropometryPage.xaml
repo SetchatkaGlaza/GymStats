@@ -27,13 +27,13 @@
                                 <Button Grid.Column="1" Text="×" Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.DeleteMeasurementCommand}" CommandParameter="{Binding .}" Style="{StaticResource IconButton}" />
                             </Grid>
                             <FlexLayout Wrap="Wrap" Direction="Row" JustifyContent="Start">
-                                <Label Text="{Binding Chest, StringFormat='Грудь {0:0.#}  '}" Style="{StaticResource Badge}" Margin="0,0,12,4}" />
-                                <Label Text="{Binding Waist, StringFormat='Талия {0:0.#}  '}" Style="{StaticResource Badge}" Margin="0,0,12,4}" />
-                                <Label Text="{Binding Hips, StringFormat='Бедра {0:0.#}  '}" Style="{StaticResource Badge}" Margin="0,0,12,4}" />
-                                <Label Text="{Binding Biceps, StringFormat='Бицепс {0:0.#}  '}" Style="{StaticResource Badge}" Margin="0,0,12,4}" />
-                                <Label Text="{Binding Thigh, StringFormat='Бедро {0:0.#}  '}" Style="{StaticResource Badge}" Margin="0,0,12,4}" />
-                                <Label Text="{Binding Calf, StringFormat='Икра {0:0.#}  '}" Style="{StaticResource Badge}" Margin="0,0,12,4}" />
-                                <Label Text="{Binding Neck, StringFormat='Шея {0:0.#}'}" Style="{StaticResource Badge}" Margin="0,0,12,4}" />
+                                <Label Text="{Binding Chest, StringFormat='Грудь {0:0.#}  '}" Style="{StaticResource Badge}" Margin="0,0,12,4" />
+                                <Label Text="{Binding Waist, StringFormat='Талия {0:0.#}  '}" Style="{StaticResource Badge}" Margin="0,0,12,4" />
+                                <Label Text="{Binding Hips, StringFormat='Бедра {0:0.#}  '}" Style="{StaticResource Badge}" Margin="0,0,12,4" />
+                                <Label Text="{Binding Biceps, StringFormat='Бицепс {0:0.#}  '}" Style="{StaticResource Badge}" Margin="0,0,12,4" />
+                                <Label Text="{Binding Thigh, StringFormat='Бедро {0:0.#}  '}" Style="{StaticResource Badge}" Margin="0,0,12,4" />
+                                <Label Text="{Binding Calf, StringFormat='Икра {0:0.#}  '}" Style="{StaticResource Badge}" Margin="0,0,12,4" />
+                                <Label Text="{Binding Neck, StringFormat='Шея {0:0.#}'}" Style="{StaticResource Badge}" Margin="0,0,12,4" />
                             </FlexLayout>
                         </VerticalStackLayout>
                     </Border>
