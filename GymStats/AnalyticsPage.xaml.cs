@@ -21,8 +21,11 @@ public partial class AnalyticsPage : ContentPage
         RefreshCharts(vm);
         _handler ??= (_, e) =>
         {
-            if (e.PropertyName is nameof(AnalyticsViewModel.ExerciseProgress) or nameof(AnalyticsViewModel.BodyProgress)
-                or nameof(AnalyticsViewModel.SelectedExercise) or nameof(AnalyticsViewModel.SelectedBodyMetric)
+            if (e.PropertyName is nameof(AnalyticsViewModel.ExerciseProgress)
+                or nameof(AnalyticsViewModel.WorkoutProgress)
+                or nameof(AnalyticsViewModel.BodyProgress)
+                or nameof(AnalyticsViewModel.SelectedExercise)
+                or nameof(AnalyticsViewModel.SelectedBodyMetric)
                 or nameof(AnalyticsViewModel.BodyMetricValues))
                 MainThread.BeginInvokeOnMainThread(() => RefreshCharts(vm));
         };
@@ -38,11 +41,22 @@ public partial class AnalyticsPage : ContentPage
 
     private void RefreshCharts(AnalyticsViewModel vm)
     {
-        ExerciseChart.Drawable = new ProgressChartDrawable { Values = vm.ExerciseProgress.Select(x => x.Weight).ToList(), EmptyText = "Недостаточно данных" };
-        VolumeChart.Drawable = new ProgressChartDrawable { Values = vm.ExerciseProgress.Select(x => x.Volume).ToList(), EmptyText = "Недостаточно данных" };
-        BodyChart.Drawable = new ProgressChartDrawable { Values = vm.BodyMetricValues, EmptyText = "Добавь хотя бы два замера" };
+        ExerciseChart.Drawable = new ProgressChartDrawable { Values = vm.ExerciseProgress.Select(x => x.Weight).ToList(), EmptyText = "Нужно 2+ тренировки", Unit = "кг" };
+        OneRepMaxChart.Drawable = new ProgressChartDrawable { Values = vm.ExerciseProgress.Select(x => x.EstimatedOneRepMax).ToList(), EmptyText = "Нужно 2+ тренировки", Unit = "кг" };
+        VolumeChart.Drawable = new ProgressChartDrawable { Values = vm.ExerciseProgress.Select(x => x.Volume).ToList(), EmptyText = "Нужно 2+ тренировки", Unit = "кг" };
+        RepsChart.Drawable = new ProgressChartDrawable { Values = vm.ExerciseProgress.Select(x => (double)x.Reps).ToList(), EmptyText = "Нужно 2+ тренировки", Unit = "повт." };
+        WorkoutVolumeChart.Drawable = new ProgressChartDrawable { Values = vm.WorkoutProgress.Select(x => x.Volume).ToList(), EmptyText = "Нужно 2+ тренировки", Unit = "кг" };
+        WorkoutRpeChart.Drawable = new ProgressChartDrawable { Values = vm.WorkoutProgress.Select(x => x.AverageRpe).ToList(), EmptyText = "Нужно 2+ тренировки", Unit = "RPE" };
+        BodyChart.Drawable = new ProgressChartDrawable { Values = vm.BodyMetricValues, EmptyText = "Добавь 2+ замера", Unit = SelectedBodyUnit(vm.SelectedBodyMetric) };
+
         ExerciseChart.Invalidate();
+        OneRepMaxChart.Invalidate();
         VolumeChart.Invalidate();
+        RepsChart.Invalidate();
+        WorkoutVolumeChart.Invalidate();
+        WorkoutRpeChart.Invalidate();
         BodyChart.Invalidate();
     }
+
+    private static string SelectedBodyUnit(string metric) => metric == "Вес" ? "кг" : "см";
 }
