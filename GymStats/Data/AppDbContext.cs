@@ -1,5 +1,6 @@
 using GymStats.Models;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace GymStats.Data;
 
@@ -31,38 +32,106 @@ public class AppDbContext : DbContext
     public async Task EnsureReadyAsync()
     {
         await Database.EnsureCreatedAsync();
-        await AddColumnIfMissingAsync("Exercises", "MovementType", "TEXT NOT NULL DEFAULT ''");
-        await AddColumnIfMissingAsync("Exercises", "Angle", "TEXT NOT NULL DEFAULT ''");
-        await AddColumnIfMissingAsync("Exercises", "Description", "TEXT NOT NULL DEFAULT ''");
-        await AddColumnIfMissingAsync("Exercises", "IsCustom", "INTEGER NOT NULL DEFAULT 0");
-        await AddColumnIfMissingAsync("BodyMeasurements", "Neck", "REAL NOT NULL DEFAULT 0");
-        await AddColumnIfMissingAsync("WorkoutExercises", "TargetSets", "INTEGER NOT NULL DEFAULT 0");
-        await AddColumnIfMissingAsync("WorkoutExercises", "TargetReps", "INTEGER NOT NULL DEFAULT 0");
-        await AddColumnIfMissingAsync("WorkoutExercises", "TargetWeight", "REAL NOT NULL DEFAULT 0");
-        await AddColumnIfMissingAsync("WorkoutExercises", "TargetRPE", "INTEGER NOT NULL DEFAULT 0");
+
+        var connection = Database.GetDbConnection();
+        var wasOpen = connection.State == ConnectionState.Open;
+        if (!wasOpen)
+            await connection.OpenAsync();
+
+        try
+        {
+            // EnsureCreated does not add tables to an already existing database.
+            // These tables were introduced after the first app versions.
+            await EnsureTableIfMissingAsync(
+                "BodyMeasurements",
+                """
+                CREATE TABLE IF NOT EXISTS [BodyMeasurements] (
+                    [Id] INTEGER NOT NULL CONSTRAINT [PK_BodyMeasurements] PRIMARY KEY AUTOINCREMENT,
+                    [Date] TEXT NOT NULL,
+                    [Weight] REAL NOT NULL,
+                    [Chest] REAL NOT NULL,
+                    [Waist] REAL NOT NULL,
+                    [Hips] REAL NOT NULL,
+                    [Biceps] REAL NOT NULL,
+                    [Thigh] REAL NOT NULL,
+                    [Calf] REAL NOT NULL,
+                    [Neck] REAL NOT NULL
+                );
+                CREATE INDEX IF NOT EXISTS [IX_BodyMeasurements_Date] ON [BodyMeasurements] ([Date]);
+                """);
+
+            await EnsureTableIfMissingAsync(
+                "MediaEntries",
+                """
+                CREATE TABLE IF NOT EXISTS [MediaEntries] (
+                    [Id] INTEGER NOT NULL CONSTRAINT [PK_MediaEntries] PRIMARY KEY AUTOINCREMENT,
+                    [Date] TEXT NOT NULL,
+                    [FilePath] TEXT NOT NULL,
+                    [Description] TEXT NOT NULL,
+                    [MediaType] TEXT NOT NULL
+                );
+                CREATE INDEX IF NOT EXISTS [IX_MediaEntries_Date] ON [MediaEntries] ([Date]);
+                """);
+
+            await AddColumnIfMissingAsync("Exercises", "MovementType", "TEXT NOT NULL DEFAULT ''");
+            await AddColumnIfMissingAsync("Exercises", "Angle", "TEXT NOT NULL DEFAULT ''");
+            await AddColumnIfMissingAsync("Exercises", "Description", "TEXT NOT NULL DEFAULT ''");
+            await AddColumnIfMissingAsync("Exercises", "IsCustom", "INTEGER NOT NULL DEFAULT 0");
+            await AddColumnIfMissingAsync("BodyMeasurements", "Neck", "REAL NOT NULL DEFAULT 0");
+            await AddColumnIfMissingAsync("WorkoutExercises", "TargetSets", "INTEGER NOT NULL DEFAULT 0");
+            await AddColumnIfMissingAsync("WorkoutExercises", "TargetReps", "INTEGER NOT NULL DEFAULT 0");
+            await AddColumnIfMissingAsync("WorkoutExercises", "TargetWeight", "REAL NOT NULL DEFAULT 0");
+            await AddColumnIfMissingAsync("WorkoutExercises", "TargetRPE", "INTEGER NOT NULL DEFAULT 0");
+        }
+        finally
+        {
+            if (!wasOpen)
+                await connection.CloseAsync();
+        }
+
         await SeedDataAsync();
+    }
+
+    private async Task EnsureTableIfMissingAsync(string table, string createSql)
+    {
+        await using var command = Database.GetDbConnection().CreateCommand();
+        command.CommandText = "SELECT 1 FROM sqlite_master WHERE type='table' AND name=$table LIMIT 1;";
+        var parameter = command.CreateParameter();
+        parameter.ParameterName = "$table";
+        parameter.Value = table;
+        command.Parameters.Add(parameter);
+
+        if (await command.ExecuteScalarAsync() is not null)
+            return;
+
+        command.CommandText = createSql;
+        command.Parameters.Clear();
+        await command.ExecuteNonQueryAsync();
     }
 
     private async Task AddColumnIfMissingAsync(string table, string column, string definition)
     {
-        var connection = Database.GetDbConnection();
-        await connection.OpenAsync();
-        await using var command = connection.CreateCommand();
+        await using var command = Database.GetDbConnection().CreateCommand();
         command.CommandText = $"PRAGMA table_info([{table}]);";
+
         var exists = false;
         await using (var reader = await command.ExecuteReaderAsync())
         {
             while (await reader.ReadAsync())
             {
-                if (string.Equals(reader.GetString(1), column, StringComparison.OrdinalIgnoreCase)) { exists = true; break; }
+                if (string.Equals(reader.GetString(1), column, StringComparison.OrdinalIgnoreCase))
+                {
+                    exists = true;
+                    break;
+                }
             }
         }
+
         if (!exists)
         {
             command.CommandText = $"ALTER TABLE [{table}] ADD COLUMN [{column}] {definition};";
             await command.ExecuteNonQueryAsync();
         }
-        await connection.CloseAsync();
     }
 
     private async Task SeedDataAsync()
