@@ -3,30 +3,47 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="GymStats.AddSetPage"
              Title="Новый подход">
-    <ScrollView>
-        <VerticalStackLayout Style="{StaticResource PageContent}">
-            <VerticalStackLayout Spacing="4">
+    <ScrollView Keyboard="Default">
+        <VerticalStackLayout Style="{StaticResource PageContent}" Spacing="14">
+            <VerticalStackLayout Spacing="3">
                 <Label Text="Новый подход" Style="{StaticResource PageTitle}" />
-                <Label Text="Запиши фактический результат подхода." Style="{StaticResource PageSubtitle}" />
+                <Label Text="Введи результат — остальное GymStats посчитает сам." Style="{StaticResource PageSubtitle}" />
             </VerticalStackLayout>
-            <Border Style="{StaticResource Card}" IsVisible="{Binding HasPreviousPerformance}">
-                <Label Text="{Binding PreviousPerformance}" Style="{StaticResource CardMeta}" />
-            </Border>
-            <Border Style="{StaticResource Card}">
-                <VerticalStackLayout Spacing="12">
-                    <Label Text="Вес (кг)" Style="{StaticResource FieldLabel}" />
-                    <Entry Text="{Binding Weight}" Placeholder="0" Keyboard="Numeric" Style="{StaticResource Input}" />
-                    <Label Text="Повторения" Style="{StaticResource FieldLabel}" />
-                    <Entry Text="{Binding Reps}" Keyboard="Numeric" Style="{StaticResource Input}" />
-                    <Label Text="RPE (1–10)" Style="{StaticResource FieldLabel}" />
-                    <Entry Text="{Binding Rpe}" Keyboard="Numeric" Style="{StaticResource Input}" />
-                    <Label Text="Темп" Style="{StaticResource FieldLabel}" />
-                    <Entry Text="{Binding Tempo}" Placeholder="3-1-1-0" Style="{StaticResource Input}" />
+
+            <Border Style="{StaticResource PreviousCard}" IsVisible="{Binding HasPreviousPerformance}">
+                <VerticalStackLayout Spacing="3">
+                    <Label Text="ПРЕДЫДУЩИЙ РЕЗУЛЬТАТ" Style="{StaticResource FieldLabel}" />
+                    <Label Text="{Binding PreviousPerformance}" Style="{StaticResource CardTitle}" />
                 </VerticalStackLayout>
             </Border>
+
+            <Border Style="{StaticResource Card}">
+                <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" ColumnSpacing="10" RowSpacing="10">
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Вес, кг" Style="{StaticResource FieldLabel}" />
+                        <Entry x:Name="WeightEntry" Text="{Binding Weight}" Placeholder="0"
+                               Keyboard="Numeric" ReturnType="Next" Style="{StaticResource Input}" />
+                    </VerticalStackLayout>
+                    <VerticalStackLayout Grid.Column="1" Spacing="5">
+                        <Label Text="Повторы" Style="{StaticResource FieldLabel}" />
+                        <Entry Text="{Binding Reps}" Keyboard="Numeric" ReturnType="Next" Style="{StaticResource Input}" />
+                    </VerticalStackLayout>
+                    <VerticalStackLayout Grid.Row="1" Spacing="5">
+                        <Label Text="RPE" Style="{StaticResource FieldLabel}" />
+                        <Entry Text="{Binding Rpe}" Keyboard="Numeric" ReturnType="Next" Style="{StaticResource Input}" />
+                    </VerticalStackLayout>
+                    <VerticalStackLayout Grid.Row="1" Grid.Column="1" Spacing="5">
+                        <Label Text="Темп" Style="{StaticResource FieldLabel}" />
+                        <Entry Text="{Binding Tempo}" Placeholder="3-1-1-0" ReturnType="Done" Style="{StaticResource Input}" />
+                    </VerticalStackLayout>
+                </Grid>
+            </Border>
+
             <Label Text="{Binding StatusMessage}" Style="{StaticResource ErrorText}" IsVisible="{Binding IsStatusVisible}" />
+
             <Button Text="Сохранить подход" Command="{Binding SaveSetCommand}" Style="{StaticResource PrimaryButton}" />
-            <Button Text="Отмена" Command="{Binding CancelCommand}" Style="{StaticResource SecondaryButton}" />
+            <Button Text="Сохранить и добавить ещё" Command="{Binding SaveAndAddAnotherCommand}" Style="{StaticResource SecondaryButton}" />
+            <Button Text="Отмена" Command="{Binding CancelCommand}" Style="{StaticResource TertiaryButton}" />
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
