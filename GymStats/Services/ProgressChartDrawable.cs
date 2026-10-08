@@ -6,14 +6,14 @@ public sealed class ProgressChartDrawable : IDrawable
 {
     public IReadOnlyList<double> Values { get; set; } = Array.Empty<double>();
     public string EmptyText { get; set; } = "Нет данных";
+    public string Unit { get; set; } = string.Empty;
 
     public void Draw(ICanvas canvas, RectF dirtyRect)
     {
         canvas.SaveState();
-        canvas.StrokeSize = 2;
-        canvas.FontSize = 11;
+        canvas.FontSize = 10;
 
-        if (Values.Count < 2)
+        if (Values.Count < 2 || dirtyRect.Width < 80 || dirtyRect.Height < 80)
         {
             canvas.FontColor = Color.FromArgb("#8A938D");
             canvas.DrawString(EmptyText, dirtyRect.Center.X, dirtyRect.Center.Y, HorizontalAlignment.Center);
@@ -21,25 +21,41 @@ public sealed class ProgressChartDrawable : IDrawable
             return;
         }
 
-        var left = 12f;
-        var right = dirtyRect.Width - 12f;
-        var top = 16f;
-        var bottom = dirtyRect.Height - 20f;
+        const float left = 38f;
+        const float rightInset = 10f;
+        const float top = 18f;
+        const float bottomInset = 28f;
+        var right = dirtyRect.Width - rightInset;
+        var bottom = dirtyRect.Height - bottomInset;
+
         var min = Values.Min();
         var max = Values.Max();
+        var padding = Math.Max((max - min) * 0.12, Math.Max(Math.Abs(max) * 0.02, 0.5));
+        min -= padding;
+        max += padding;
         var range = Math.Max(max - min, 1);
 
-        canvas.StrokeColor = Color.FromArgb("#DCE7DF");
-        canvas.DrawLine(left, bottom, right, bottom);
-        canvas.DrawLine(left, top, left, bottom);
+        canvas.StrokeSize = 1;
+        canvas.StrokeColor = Color.FromArgb("#DDE5DF");
+        for (var i = 0; i <= 3; i++)
+        {
+            var y = top + (bottom - top) * i / 3f;
+            canvas.DrawLine(left, y, right, y);
+        }
+
+        canvas.FontColor = Color.FromArgb("#718078");
+        canvas.DrawString(FormatValue(max), 2, top - 4, HorizontalAlignment.Left);
+        canvas.DrawString(FormatValue((max + min) / 2), 2, (top + bottom) / 2 - 4, HorizontalAlignment.Left);
+        canvas.DrawString(FormatValue(min), 2, bottom - 4, HorizontalAlignment.Left);
 
         canvas.StrokeColor = Color.FromArgb("#2F8F5B");
+        canvas.StrokeSize = 2.5f;
         canvas.FillColor = Color.FromArgb("#2F8F5B");
 
         PointF? previous = null;
         for (var i = 0; i < Values.Count; i++)
         {
-            var x = Values.Count == 1 ? left : left + (right - left) * i / (Values.Count - 1);
+            var x = left + (right - left) * i / (Values.Count - 1);
             var y = bottom - (float)((Values[i] - min) / range) * (bottom - top);
 
             if (previous is { } p)
@@ -49,9 +65,12 @@ public sealed class ProgressChartDrawable : IDrawable
             previous = new PointF(x, y);
         }
 
-        canvas.FontColor = Color.FromArgb("#64706A");
-        canvas.DrawString(max.ToString("0.#"), 4, top, HorizontalAlignment.Left);
-        canvas.DrawString(min.ToString("0.#"), 4, bottom, HorizontalAlignment.Left);
+        canvas.FontColor = Color.FromArgb("#247247");
+        canvas.DrawString($"{Values[^1]:0.#} {Unit}".Trim(), right, top - 4, HorizontalAlignment.Right);
+
         canvas.RestoreState();
     }
+
+    private static string FormatValue(double value) =>
+        Math.Abs(value) >= 1000 ? value.ToString("0.#") : value.ToString("0.##");
 }
