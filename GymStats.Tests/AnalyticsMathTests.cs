@@ -25,8 +25,9 @@ public class AnalyticsMathTests
     }
 
     [Fact]
-    public void E1Rm_IsZeroForInvalidReps()
+    public void E1Rm_IsZeroForInvalidValues()
     {
         Assert.Equal(0, AnalyticsMath.EstimatedOneRepMax(100, 0));
+        Assert.Equal(0, AnalyticsMath.EstimatedOneRepMax(-100, 6));
     }
 }
