@@ -83,3 +83,7 @@ CI дополнительно проверяет unit-тесты и Release-сб
 Приложение рассчитано на Android API 24+ и подходит для Android 13 (API 33). Для обычной работы интернет не требуется.
 
 > **Важно:** APK из CI — это Release-сборка приложения. Если Android блокирует установку, проверь разрешение **«Установка неизвестных приложений»** для используемого файлового менеджера или браузера.
+
+## Финальная проверка
+
+Локальные unit-тесты: `dotnet test GymStats.Tests/GymStats.Tests.csproj`. Release-сборки Android, Windows и iOS проверяются GitHub Actions. Для Android дополнительно публикуется APK artifact `GymStats-Android`.
