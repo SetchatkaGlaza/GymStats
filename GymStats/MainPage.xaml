@@ -3,69 +3,81 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="GymStats.MainPage"
              Title="GymStats">
-    <ScrollView>
-        <VerticalStackLayout Style="{StaticResource PageContent}" Spacing="18">
-            <Grid ColumnDefinitions="*,Auto">
-                <VerticalStackLayout Spacing="3">
-                    <Label Text="GymStats" Style="{StaticResource PageTitle}" />
-                    <Label Text="Твоя история. Твои цифры. Твой прогресс." Style="{StaticResource PageSubtitle}" />
-                </VerticalStackLayout>
-                <Button Grid.Column="1" Text="↗" Command="{Binding GoToBackupCommand}" Style="{StaticResource IconButton}" />
-            </Grid>
-
-            <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
-                <Border Style="{StaticResource StatCard}">
-                    <VerticalStackLayout><Label Text="Тренировок" Style="{StaticResource StatLabel}" /><Label Text="{Binding WorkoutCount}" Style="{StaticResource StatValue}" /></VerticalStackLayout>
-                </Border>
-                <Border Grid.Column="1" Style="{StaticResource StatCard}">
-                    <VerticalStackLayout><Label Text="Общий тоннаж" Style="{StaticResource StatLabel}" /><Label Text="{Binding TotalVolume, StringFormat='{0:N0} кг'}" Style="{StaticResource StatValue}" /></VerticalStackLayout>
-                </Border>
-            </Grid>
-
-            <Border Style="{StaticResource Card}">
-                <VerticalStackLayout Spacing="12">
-                    <Label Text="Готов к следующей тренировке?" Style="{StaticResource SectionTitle}" />
-                    <Label Text="{Binding LastWorkoutDate, StringFormat='Последняя: {0:dd.MM.yyyy}'}" Style="{StaticResource CardMeta}" />
-                    <Button Text="+ Начать тренировку" Command="{Binding GoToAddWorkoutCommand}" Style="{StaticResource PrimaryButton}" />
-                </VerticalStackLayout>
-            </Border>
-
-            <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
-                <Button Text="Аналитика" Command="{Binding GoToAnalyticsCommand}" Style="{StaticResource SecondaryButton}" />
-                <Button Grid.Column="1" Text="Прогресс" Command="{Binding GoToMediaCommand}" Style="{StaticResource SecondaryButton}" />
-            </Grid>
-
-            <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
-                <Button Text="Замеры" Command="{Binding GoToAnthropometryCommand}" Style="{StaticResource SecondaryButton}" />
-                <Button Grid.Column="1" Text="Шаблоны" Command="{Binding GoToTemplatesCommand}" Style="{StaticResource SecondaryButton}" />
-            </Grid>
-
-            <Label Text="Последние тренировки" Style="{StaticResource SectionTitle}" />
-
-            <CollectionView ItemsSource="{Binding Workouts}" SelectionMode="None" HeightRequest="320">
-                <CollectionView.EmptyView>
-                    <VerticalStackLayout Padding="10,40" Spacing="8">
-                        <Label Text="🏋️" Style="{StaticResource EmptyIcon}" />
-                        <Label Text="Пока нет тренировок. Создай первую — приложение само начнёт собирать статистику." Style="{StaticResource EmptyText}" />
+    <CollectionView ItemsSource="{Binding Workouts}" SelectionMode="None" Margin="22,0">
+        <CollectionView.Header>
+            <VerticalStackLayout Padding="0,24,0,14" Spacing="14">
+                <Grid ColumnDefinitions="*,Auto">
+                    <VerticalStackLayout Spacing="3">
+                        <Label Text="GymStats" Style="{StaticResource PageTitle}" />
+                        <Label Text="Твоя история. Твои цифры. Твой прогресс." Style="{StaticResource PageSubtitle}" />
                     </VerticalStackLayout>
-                </CollectionView.EmptyView>
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Border Style="{StaticResource Card}" Margin="0,0,0,10">
-                            <Grid ColumnDefinitions="*,Auto">
-                                <VerticalStackLayout>
-                                    <Label Text="{Binding Name}" Style="{StaticResource CardTitle}" />
-                                    <Label Text="{Binding Date, StringFormat='{0:dd MMMM yyyy}'}" Style="{StaticResource CardMeta}" />
-                                </VerticalStackLayout>
-                                <Label Grid.Column="1" Text="›" FontSize="28" TextColor="{StaticResource Primary}" VerticalOptions="Center" />
-                                <Grid.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.OpenWorkoutCommand}" CommandParameter="{Binding .}" />
-                                </Grid.GestureRecognizers>
-                            </Grid>
-                        </Border>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-            </CollectionView>
-        </VerticalStackLayout>
-    </ScrollView>
+                    <Button Grid.Column="1" Text="↗" Command="{Binding GoToBackupCommand}" Style="{StaticResource IconButton}" />
+                </Grid>
+
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                    <Border Style="{StaticResource StatCard}">
+                        <VerticalStackLayout>
+                            <Label Text="Тренировок" Style="{StaticResource StatLabel}" />
+                            <Label Text="{Binding WorkoutCount}" Style="{StaticResource StatValue}" />
+                        </VerticalStackLayout>
+                    </Border>
+                    <Border Grid.Column="1" Style="{StaticResource StatCard}">
+                        <VerticalStackLayout>
+                            <Label Text="Общий тоннаж" Style="{StaticResource StatLabel}" />
+                            <Label Text="{Binding TotalVolume, StringFormat='{0:N0} кг'}" Style="{StaticResource StatValue}" />
+                        </VerticalStackLayout>
+                    </Border>
+                </Grid>
+
+                <Border Style="{StaticResource Card}">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Готов к следующей тренировке?" Style="{StaticResource SectionTitle}" />
+                        <Label Text="{Binding LastWorkoutDate, StringFormat='Последняя: {0:dd.MM.yyyy}'}"
+                               Style="{StaticResource CardMeta}" />
+                        <Button Text="+ Начать тренировку"
+                                Command="{Binding GoToAddWorkoutCommand}"
+                                Style="{StaticResource PrimaryButton}" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                    <Button Text="Аналитика" Command="{Binding GoToAnalyticsCommand}" Style="{StaticResource SecondaryButton}" />
+                    <Button Grid.Column="1" Text="Прогресс" Command="{Binding GoToMediaCommand}" Style="{StaticResource SecondaryButton}" />
+                </Grid>
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                    <Button Text="Замеры" Command="{Binding GoToAnthropometryCommand}" Style="{StaticResource SecondaryButton}" />
+                    <Button Grid.Column="1" Text="Шаблоны" Command="{Binding GoToTemplatesCommand}" Style="{StaticResource SecondaryButton}" />
+                </Grid>
+
+                <Label Text="Последние тренировки" Style="{StaticResource SectionTitle}" Margin="0,4,0,0" />
+            </VerticalStackLayout>
+        </CollectionView.Header>
+
+        <CollectionView.EmptyView>
+            <VerticalStackLayout Padding="10,42,10,80" Spacing="8">
+                <Label Text="🏋️" Style="{StaticResource EmptyIcon}" />
+                <Label Text="Пока нет тренировок. Создай первую — приложение само начнёт собирать статистику."
+                       Style="{StaticResource EmptyText}" />
+            </VerticalStackLayout>
+        </CollectionView.EmptyView>
+
+        <CollectionView.ItemTemplate>
+            <DataTemplate>
+                <Border Style="{StaticResource Card}" Margin="0,0,0,10">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <VerticalStackLayout>
+                            <Label Text="{Binding Name}" Style="{StaticResource CardTitle}" />
+                            <Label Text="{Binding Date, StringFormat='{0:dd MMMM yyyy}'}" Style="{StaticResource CardMeta}" />
+                        </VerticalStackLayout>
+                        <Label Grid.Column="1" Text="›" FontSize="28" TextColor="{StaticResource Primary}" VerticalOptions="Center" />
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type ContentPage}}, Path=BindingContext.OpenWorkoutCommand}"
+                                CommandParameter="{Binding .}" />
+                        </Grid.GestureRecognizers>
+                    </Grid>
+                </Border>
+            </DataTemplate>
+        </CollectionView.ItemTemplate>
+    </CollectionView>
 </ContentPage>
