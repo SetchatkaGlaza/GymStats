@@ -5,7 +5,10 @@
              Title="Аналитика">
     <ScrollView>
         <VerticalStackLayout Style="{StaticResource PageContent}" Spacing="18">
-            <VerticalStackLayout Spacing="4"><Label Text="Аналитика" Style="{StaticResource PageTitle}" /><Label Text="Не просто история — реальные изменения." Style="{StaticResource PageSubtitle}" /></VerticalStackLayout>
+            <VerticalStackLayout Spacing="4">
+                <Label Text="Аналитика" Style="{StaticResource PageTitle}" />
+                <Label Text="Не просто история — реальные изменения." Style="{StaticResource PageSubtitle}" />
+            </VerticalStackLayout>
             <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" ColumnSpacing="10" RowSpacing="10">
                 <Border Style="{StaticResource StatCard}"><VerticalStackLayout><Label Text="Тренировок" Style="{StaticResource StatLabel}" /><Label Text="{Binding WorkoutCount}" Style="{StaticResource StatValue}" /></VerticalStackLayout></Border>
                 <Border Grid.Column="1" Style="{StaticResource StatCard}"><VerticalStackLayout><Label Text="Тоннаж" Style="{StaticResource StatLabel}" /><Label Text="{Binding TotalVolume, StringFormat='{0:N0} кг'}" Style="{StaticResource StatValue}" /></VerticalStackLayout></Border>
@@ -13,20 +16,33 @@
                 <Border Grid.Row="1" Grid.Column="1" Style="{StaticResource StatCard}"><VerticalStackLayout><Label Text="За этот месяц" Style="{StaticResource StatLabel}" /><Label Text="{Binding WorkoutsThisMonth}" Style="{StaticResource StatValue}" /></VerticalStackLayout></Border>
             </Grid>
             <Border Style="{StaticResource Card}">
-                <VerticalStackLayout Spacing="10">
-                    <Label Text="Сила и объём" Style="{StaticResource SectionTitle}" />
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="Прогресс упражнения" Style="{StaticResource SectionTitle}" />
                     <Picker ItemsSource="{Binding Exercises}" SelectedItem="{Binding SelectedExercise}" ItemDisplayBinding="{Binding Name}" Style="{StaticResource PickerInput}" />
-                    <Label Text="Максимальный рабочий вес" Style="{StaticResource FieldLabel}" />
-                    <GraphicsView x:Name="ExerciseChart" HeightRequest="180" />
-                    <Label Text="Объём упражнения по тренировкам" Style="{StaticResource FieldLabel}" />
-                    <GraphicsView x:Name="VolumeChart" HeightRequest="180" />
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                        <VerticalStackLayout Spacing="6"><Label Text="Вес" Style="{StaticResource FieldLabel}" /><GraphicsView x:Name="ExerciseChart" HeightRequest="190" /></VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="1" Spacing="6"><Label Text="Расчётный 1ПМ" Style="{StaticResource FieldLabel}" /><GraphicsView x:Name="OneRepMaxChart" HeightRequest="190" /></VerticalStackLayout>
+                    </Grid>
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                        <VerticalStackLayout Spacing="6"><Label Text="Объём упражнения" Style="{StaticResource FieldLabel}" /><GraphicsView x:Name="VolumeChart" HeightRequest="190" /></VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="1" Spacing="6"><Label Text="Повторения" Style="{StaticResource FieldLabel}" /><GraphicsView x:Name="RepsChart" HeightRequest="190" /></VerticalStackLayout>
+                    </Grid>
                 </VerticalStackLayout>
             </Border>
             <Border Style="{StaticResource Card}">
-                <VerticalStackLayout Spacing="10">
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="Тренировочная нагрузка" Style="{StaticResource SectionTitle}" />
+                    <Label Text="Тоннаж каждой тренировки" Style="{StaticResource FieldLabel}" />
+                    <GraphicsView x:Name="WorkoutVolumeChart" HeightRequest="200" />
+                    <Label Text="Средний RPE по тренировкам" Style="{StaticResource FieldLabel}" />
+                    <GraphicsView x:Name="WorkoutRpeChart" HeightRequest="200" />
+                </VerticalStackLayout>
+            </Border>
+            <Border Style="{StaticResource Card}">
+                <VerticalStackLayout Spacing="12">
                     <Label Text="Антропометрия" Style="{StaticResource SectionTitle}" />
                     <Picker ItemsSource="{Binding BodyMetrics}" SelectedItem="{Binding SelectedBodyMetric}" Style="{StaticResource PickerInput}" />
-                    <GraphicsView x:Name="BodyChart" HeightRequest="180" />
+                    <GraphicsView x:Name="BodyChart" HeightRequest="200" />
                 </VerticalStackLayout>
             </Border>
         </VerticalStackLayout>
