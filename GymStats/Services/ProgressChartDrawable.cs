@@ -5,6 +5,7 @@ namespace GymStats.Services;
 public sealed class ProgressChartDrawable : IDrawable
 {
     public IReadOnlyList<double> Values { get; set; } = Array.Empty<double>();
+    public IReadOnlyList<string> Labels { get; set; } = Array.Empty<string>();
     public string EmptyText { get; set; } = "Нет данных";
     public string Unit { get; set; } = string.Empty;
 
@@ -63,6 +64,20 @@ public sealed class ProgressChartDrawable : IDrawable
 
             canvas.FillCircle(x, y, 3.5f);
             previous = new PointF(x, y);
+        }
+
+        if (Labels.Count == Values.Count)
+        {
+            canvas.FontColor = Color.FromArgb("#718078");
+            canvas.DrawString(Labels[0], left, bottom + 8, HorizontalAlignment.Left);
+            canvas.DrawString(Labels[^1], right, bottom + 8, HorizontalAlignment.Right);
+
+            if (Labels.Count > 2)
+            {
+                var middle = Labels.Count / 2;
+                var middleX = left + (right - left) * middle / (Labels.Count - 1);
+                canvas.DrawString(Labels[middle], middleX, bottom + 8, HorizontalAlignment.Center);
+            }
         }
 
         canvas.FontColor = Color.FromArgb("#247247");
