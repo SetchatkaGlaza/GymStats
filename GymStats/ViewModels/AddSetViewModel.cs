@@ -11,6 +11,7 @@ namespace GymStats.ViewModels;
 public partial class AddSetViewModel : ObservableObject
 {
     private readonly AppDbContext _db;
+
     [ObservableProperty] private int _workoutExerciseId;
     [ObservableProperty] private string _weight = string.Empty;
     [ObservableProperty] private string _reps = "8";
@@ -27,11 +28,12 @@ public partial class AddSetViewModel : ObservableObject
 
     private async Task LoadPreviousPerformanceAsync()
     {
-        var current = await _db.WorkoutExercises.Include(x => x.Exercise).FirstOrDefaultAsync(x => x.Id == WorkoutExerciseId);
+        var current = await _db.WorkoutExercises.AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Id == WorkoutExerciseId);
         if (current is null) return;
 
         var previous = await (
-            from s in _db.Sets
+            from s in _db.Sets.AsNoTracking()
             join we in _db.WorkoutExercises on s.WorkoutExerciseId equals we.Id
             join w in _db.Workouts on we.WorkoutId equals w.Id
             where we.ExerciseId == current.ExerciseId && we.WorkoutId != current.WorkoutId
@@ -47,37 +49,72 @@ public partial class AddSetViewModel : ObservableObject
 
         PreviousPerformance = $"Последний раз: {previous.Weight:0.#} кг × {previous.Reps} • RPE {previous.RPE} ({previous.Date:dd.MM.yyyy})";
         HasPreviousPerformance = true;
+
         if (string.IsNullOrWhiteSpace(Weight) || Weight == "0")
             Weight = previous.Weight.ToString("0.##", CultureInfo.CurrentCulture);
+    }
+
+    private async Task<bool> TrySaveAsync()
+    {
+        IsStatusVisible = false;
+
+        if (!double.TryParse(Weight.Replace(',', '.'), NumberStyles.Float, CultureInfo.InvariantCulture, out var weight) || weight < 0)
+        {
+            StatusMessage = "Вес должен быть числом не меньше 0.";
+            IsStatusVisible = true;
+            return false;
+        }
+
+        if (!int.TryParse(Reps, out var reps) || reps <= 0)
+        {
+            StatusMessage = "Количество повторений должно быть больше 0.";
+            IsStatusVisible = true;
+            return false;
+        }
+
+        if (!int.TryParse(Rpe, out var rpe) || rpe is < 1 or > 10)
+        {
+            StatusMessage = "RPE должен быть от 1 до 10.";
+            IsStatusVisible = true;
+            return false;
+        }
+
+        var maxOrder = await _db.Sets
+            .Where(s => s.WorkoutExerciseId == WorkoutExerciseId)
+            .Select(s => (int?)s.Order)
+            .MaxAsync() ?? 0;
+
+        _db.Sets.Add(new Set
+        {
+            WorkoutExerciseId = WorkoutExerciseId,
+            Weight = weight,
+            Reps = reps,
+            RPE = rpe,
+            Tempo = Tempo.Trim(),
+            Order = maxOrder + 1
+        });
+
+        await _db.SaveChangesAsync();
+        return true;
     }
 
     [RelayCommand]
     private async Task SaveSetAsync()
     {
-        if (!double.TryParse(Weight.Replace(',', '.'), NumberStyles.Float, CultureInfo.InvariantCulture, out var weight) || weight < 0)
-        {
-            StatusMessage = "Вес должен быть числом не меньше 0.";
-            IsStatusVisible = true;
-            return;
-        }
-        if (!int.TryParse(Reps, out var reps) || reps <= 0)
-        {
-            StatusMessage = "Количество повторений должно быть больше 0.";
-            IsStatusVisible = true;
-            return;
-        }
-        if (!int.TryParse(Rpe, out var rpe) || rpe is < 1 or > 10)
-        {
-            StatusMessage = "RPE должен быть от 1 до 10.";
-            IsStatusVisible = true;
-            return;
-        }
-
-        var maxOrder = await _db.Sets.Where(s => s.WorkoutExerciseId == WorkoutExerciseId).Select(s => (int?)s.Order).MaxAsync() ?? 0;
-        _db.Sets.Add(new Set { WorkoutExerciseId = WorkoutExerciseId, Weight = weight, Reps = reps, RPE = rpe, Tempo = Tempo.Trim(), Order = maxOrder + 1 });
-        await _db.SaveChangesAsync();
-        await Shell.Current.GoToAsync("..");
+        if (await TrySaveAsync())
+            await Shell.Current.GoToAsync("..");
     }
 
-    [RelayCommand] private Task CancelAsync() => Shell.Current.GoToAsync("..");
+    [RelayCommand]
+    private async Task SaveAndAddAnotherAsync()
+    {
+        if (!await TrySaveAsync()) return;
+
+        StatusMessage = "Подход сохранён. Введи следующий.";
+        IsStatusVisible = false;
+        Tempo = string.Empty;
+    }
+
+    [RelayCommand]
+    private Task CancelAsync() => Shell.Current.GoToAsync("..");
 }
