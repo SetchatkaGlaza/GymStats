@@ -30,10 +30,10 @@ jobs:
         with:
           distribution: temurin
           java-version: "21"
-      - name: Install MAUI workload
-        run: dotnet workload install maui
-      - name: Restore
-        run: dotnet restore GymStats/GymStats.csproj
+      - name: Install MAUI Android workload
+        run: dotnet workload install maui-android
+      - name: Restore Android
+        run: dotnet restore GymStats/GymStats.csproj -p:TargetFramework=net10.0-android
       - name: Build Android
         run: dotnet build GymStats/GymStats.csproj -f net10.0-android -c Release --no-restore
 
@@ -46,13 +46,13 @@ jobs:
           dotnet-version: "10.0.x"
       - name: Install MAUI workload
         run: dotnet workload install maui
-      - name: Restore
-        run: dotnet restore GymStats/GymStats.csproj
+      - name: Restore Windows
+        run: dotnet restore GymStats/GymStats.csproj -p:TargetFramework=net10.0-windows10.0.19041.0 -r win-x64
       - name: Build Windows
-        run: dotnet build GymStats/GymStats.csproj -f net10.0-windows10.0.19041.0 -c Release --no-restore
+        run: dotnet build GymStats/GymStats.csproj -f net10.0-windows10.0.19041.0 -c Release --no-restore -r win-x64
 
   build-ios:
-    runs-on: macos-15
+    runs-on: xcode-27
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-dotnet@v4
@@ -61,7 +61,7 @@ jobs:
       - name: Install MAUI workload
         run: dotnet workload install maui
       - name: Restore
-        run: dotnet restore GymStats/GymStats.csproj
+        run: dotnet restore GymStats/GymStats.csproj -p:TargetFramework=net10.0-ios
       - name: Build iOS
         run: dotnet build GymStats/GymStats.csproj -f net10.0-ios -c Release --no-restore -p:EnableCodeSigning=false
       - name: Build Mac Catalyst
