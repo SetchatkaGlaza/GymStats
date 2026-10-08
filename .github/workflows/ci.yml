@@ -1,5 +1,9 @@
 name: GymStats CI
 
+concurrency:
+  group: gymstats-ci-${{ github.ref }}
+  cancel-in-progress: true
+
 on:
   push:
     branches: ["master", "feature/**"]
@@ -36,6 +40,15 @@ jobs:
         run: dotnet restore GymStats/GymStats.csproj -p:TargetFramework=net10.0-android
       - name: Build Android
         run: dotnet build GymStats/GymStats.csproj -f net10.0-android -c Release --no-restore
+      - name: Verify APK
+        shell: bash
+        run: test -n "$(find GymStats/bin/Release/net10.0-android -name '*.apk' -print -quit)"
+      - name: Upload Android APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: GymStats-Android
+          path: GymStats/bin/Release/net10.0-android/**/*.apk
+          if-no-files-found: error
 
   build-windows:
     runs-on: windows-latest
