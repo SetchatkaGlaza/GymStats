@@ -19,10 +19,12 @@ public partial class AnalyticsViewModel : ObservableObject
     [ObservableProperty] private ObservableCollection<Exercise> _exercises = new();
     [ObservableProperty] private Exercise? _selectedExercise;
     [ObservableProperty] private ObservableCollection<ExerciseProgressPoint> _exerciseProgress = new();
+    [ObservableProperty] private ObservableCollection<WorkoutProgressPoint> _workoutProgress = new();
     [ObservableProperty] private ObservableCollection<BodyProgressPoint> _bodyProgress = new();
     [ObservableProperty] private string _selectedBodyMetric = "Вес";
     [ObservableProperty] private bool _hasExerciseData;
     [ObservableProperty] private bool _hasBodyData;
+    [ObservableProperty] private bool _hasWorkoutData;
 
     public ObservableCollection<string> BodyMetrics { get; } = new(new[] { "Вес", "Грудь", "Талия", "Бедра", "Бицепс", "Бедро", "Икра", "Шея" });
 
@@ -35,19 +37,26 @@ public partial class AnalyticsViewModel : ObservableObject
     public async Task LoadAsync()
     {
         await _db.EnsureReadyAsync();
+
         WorkoutCount = await _analytics.GetWorkoutCountAsync();
         TotalVolume = await _analytics.GetTotalVolumeAsync();
         AverageRpe = await _analytics.GetAverageRpeAsync();
         WorkoutsThisMonth = await _analytics.GetWorkoutCountSinceAsync(new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1));
 
-        Exercises = new ObservableCollection<Exercise>(await _db.Exercises.AsNoTracking().OrderBy(x => x.MuscleGroup).ThenBy(x => x.Name).ToListAsync());
+        Exercises = new ObservableCollection<Exercise>(
+            await _db.Exercises.AsNoTracking().OrderBy(x => x.MuscleGroup).ThenBy(x => x.Name).ToListAsync());
+
         BodyProgress = new ObservableCollection<BodyProgressPoint>(await _analytics.GetBodyProgressAsync());
+        WorkoutProgress = new ObservableCollection<WorkoutProgressPoint>(await _analytics.GetWorkoutProgressAsync());
         HasBodyData = BodyProgress.Count > 1;
+        HasWorkoutData = WorkoutProgress.Count > 1;
 
         if (SelectedExercise is null && Exercises.Count > 0)
             SelectedExercise = Exercises[0];
         else
             await LoadExerciseAsync();
+
+        OnPropertyChanged(nameof(BodyMetricValues));
     }
 
     partial void OnSelectedExerciseChanged(Exercise? value) => _ = LoadExerciseAsync();
@@ -67,7 +76,9 @@ public partial class AnalyticsViewModel : ObservableObject
             HasExerciseData = false;
             return;
         }
-        ExerciseProgress = new ObservableCollection<ExerciseProgressPoint>(await _analytics.GetExerciseProgressAsync(SelectedExercise.Id));
+
+        ExerciseProgress = new ObservableCollection<ExerciseProgressPoint>(
+            await _analytics.GetExerciseProgressAsync(SelectedExercise.Id));
         HasExerciseData = ExerciseProgress.Count > 1;
     }
 }
