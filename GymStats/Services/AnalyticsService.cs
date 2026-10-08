@@ -5,6 +5,7 @@ namespace GymStats.Services;
 
 public sealed record ExerciseProgressPoint(DateTime Date, double Weight, double Volume, int Reps, double EstimatedOneRepMax);
 public sealed record BodyProgressPoint(DateTime Date, double Weight, double Chest, double Waist, double Hips, double Biceps, double Thigh, double Calf, double Neck);
+public sealed record WorkoutProgressPoint(DateTime Date, double Volume, double AverageRpe);
 
 public sealed class AnalyticsService
 {
@@ -49,6 +50,25 @@ public sealed class AnalyticsService
                 var e1rm = best.Reps > 0 ? best.Weight * (1 + best.Reps / 30.0) : 0;
                 return new ExerciseProgressPoint(g.Key, best.Weight, volume, best.Reps, e1rm);
             })
+            .ToList();
+    }
+
+    public async Task<List<WorkoutProgressPoint>> GetWorkoutProgressAsync()
+    {
+        var rows = await (
+            from w in _db.Workouts
+            join we in _db.WorkoutExercises on w.Id equals we.WorkoutId
+            join s in _db.Sets on we.Id equals s.WorkoutExerciseId
+            select new { w.Id, w.Date, s.Weight, s.Reps, s.RPE }
+        ).ToListAsync();
+
+        return rows
+            .GroupBy(x => new { x.Id, Date = x.Date.Date })
+            .OrderBy(g => g.Key.Date)
+            .Select(g => new WorkoutProgressPoint(
+                g.Key.Date,
+                g.Sum(x => x.Weight * x.Reps),
+                g.Average(x => x.RPE)))
             .ToList();
     }
 
